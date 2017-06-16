@@ -1,0 +1,17 @@
+extends /templates/default
+
+block title
+  title= "Users"
+  
+block header
+  +header
+    .header-item.page-title 
+      span Users
+
+block content
+  .content-body
+    for user in users
+      +section(user.username) 
+        p= user.username
+        p= user.email
+        p= user.password

@@ -1,0 +1,46 @@
+include ./filters
+include ./character
+include ./quest
+include ./comments
+include ./calendar
+
+mixin delete(object, options)
+  -options = options || {}
+  -var action = (options.action||object.url)
+  form(id=id, action=action method="delete" data-response="json")&attributes(attributes)
+    button.btn
+      block
+
+mixin logo(options)
+  -options = options || {}
+  -options.inline = options.inline || true
+  -options.text = options.text || false
+  -options.cube = options.cube || true
+  if options.inline
+    .logo.inline&attributes(attributes)
+      if options.text
+        img.text(src="/images/logo-text.svg")
+      if options.cube
+        img.cube(src="/images/logo-d6.svg")
+  else
+    .logo&attributes(attributes)
+      if options.text
+        img.text(src="/images/logo-text.svg")
+      if options.cube
+        img.cube(src="/images/logo-d6.svg")
+
+mixin section(title)
+  section
+    if title
+      .section-title
+        h2= title
+    .section-body
+      block
+    
+mixin header(options)
+  header#header&attributes(attributes)
+    .header-content
+      block
+      if breadcrumbs.length > 0
+        .header-item
+          include /components/breadcrumbs

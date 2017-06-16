@@ -1,0 +1,96 @@
+@import 'mixins.less';
+@import 'brand.less';
+@import 'responsive.less';
+@import 'components.less';
+
+@bezier-bounce: cubic-bezier(0.5, 0.2, 0.5, 1.25);
+
+@keyframes glowPulse {
+  0% {
+    background-color+: fade(white,0%)
+  }
+  100% {
+    background-color+: fade(white,100%)
+  }
+}
+
+@keyframes dropdown {
+  0% {
+	   transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes forge {
+  0% {
+    color: red;
+    background-color: @color-primary;
+    background-blend-mode: lighten;
+    .filter(brightness(2) blur(1px) saturate(1) drop-shadow(0px 0px 20px @color-primary));
+  }
+  100% {
+    text-shadow: inherit;
+    background-color: none;
+    background-blend-mode: lighten;
+    .filter(brightness(1) blur(0px) saturate(1) drop-shadow(0px 0px 0px fade(#ff9d55, 0%)));
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    .filter(hue-rotate(0deg))
+  }
+  100% {
+    .filter(hue-rotate(360deg))
+  }
+}
+
+@keyframes fadeto {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeDown {
+  0% {
+    transform: translate3d(0,0,20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0,0,0);
+    opacity: 1;
+  }
+}
+
+@keyframes vignette {
+  0% {
+    transform: scale(1.5);
+    // background-size: 200%;
+    // .filter(blur(2px));
+  }
+  100% {
+    transform: scale(1);
+    // background-size: 100%;
+    // .filter(blur(0));
+  }
+}
+
+@keyframes modalOpen {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// @keyframes pop {
+//   0%, 100% {transform: rotateZ(0deg)}
+//   33% {transform: rotateZ(-5deg)}
+//   66% {transform: rotateZ(5deg)}
+// }

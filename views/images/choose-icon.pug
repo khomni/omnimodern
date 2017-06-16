@@ -1,0 +1,5 @@
+.flex.vert
+  each icon in icons
+    label.radio.flex.horz
+      input(type="radio" value=icon name="icon")
+      span: img(src="/images/icons/"+ icon + ".svg")

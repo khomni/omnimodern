@@ -1,0 +1,88 @@
+@screen-sm-min: 720px;
+@screen-md-min: 1200px;
+@screen-lg-min: 1600px;
+
+@debug: false;
+
+.debug-lines(@text,@color) when not(@debug = false) {
+  outline: 1px dashed fade(@color,(@debug) * 100) ;
+  outline-offset: -1px;
+  // transition: opacity 0.2s;
+  &::before {
+    font-size: 10px;
+    letter-spacing: normal;
+    text-transform: none;
+    content: @text;
+    display: block;
+    color: @color;
+    z-index: 1000;
+    position: absolute;
+    opacity: @debug;
+    transition: opacity 0.2s;
+    padding: 0.25em 0.5em;
+    border-radius: 1em 1em;
+  }
+  &:hover {
+    outline: 1px dashed @color;
+    &::before {
+      opacity: 1;
+    }
+  }
+}
+
+// * < 720px
+.xs(@rules) { // affects extra small displays
+  @media only screen and (max-width: (@screen-sm-min - 1)) {
+    @rules();
+    .debug-lines("Extra Small", fade(red,50%));
+  }
+}
+
+.sm-minus(@rules) { // affects small and extra small
+  @media (max-width: (@screen-md-min - 1)){
+    @rules();
+    .debug-lines("< Small", fade(orange,50%));
+  }
+}
+
+.sm(@rules) { // affects small displays
+  @media only screen and (min-width: @screen-sm-min) and (max-width: (@screen-md-min - 1)){
+    @rules();
+    .debug-lines("Small", fade(yellow,50%));
+  }
+}
+
+.sm-plus(@rules) { // affects all but extra small
+  @media (min-width: @screen-sm-min) {
+    @rules();
+    .debug-lines(">= Small", fade(yellowgreen,50%));
+  }
+}
+
+.md-minus(@rules) { // affects medium viewports and smaller
+  @media (max-width: (@screen-lg-min - 1)){
+    @rules();
+    .debug-lines("< Medium", fade(green,50%));
+  }
+}
+
+.md(@rules) { // affects medium displays
+  @media only screen and (min-width: @screen-md-min) and (max-width: (@screen-lg-min - 1)) {
+    @rules();
+    .debug-lines("Medium", fade(teal,50%));
+  }
+}
+
+.md-plus(@rules) { // affects medium and larger
+  @media (min-width: @screen-md-min) {
+    @rules();
+    .debug-lines(">= Medium", fade(cornflowerblue,50%));
+  }
+}
+
+.lg(@rules) { // affects large displays
+  @media only screen and (min-width: @screen-lg-min) {
+    @rules();
+    .debug-lines("Large", fade(violet,50%));
+  }
+}

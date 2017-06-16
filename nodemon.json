@@ -1,0 +1,4 @@
+{
+  "ignore" : ["data/*","public/*","javascripts/*","node_modules/*","*.json", "lib/"],
+  "ext" : "js json jade pug jsx"
+}

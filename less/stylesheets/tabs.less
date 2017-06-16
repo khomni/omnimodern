@@ -1,0 +1,84 @@
+.tab-group {
+  display: flex;
+  flex-flow: row;
+  // background: url('/images/textures/marble.jpg'), #666;
+  // background: inherit;
+  // background-blend-mode: multiply;
+  color:inherit;
+  flex-shrink:0;
+  user-select:none;
+  overflow:hidden;
+  overflow-x: auto;
+
+  &::after{
+    content:"";
+    display: block;
+    flex:1;
+    background: fade(black,25%);
+    border-bottom: 1px solid fade(black,25%);
+  }
+
+  .tab {
+    .marble();
+    .cursor(pointer);
+    position: relative;
+    z-index: 1;
+    box-shadow:none;
+    color:inherit;
+    background: inherit;
+    position:relative;
+    display:block;
+    border-radius: 0;
+    padding: 0.5rem;
+    border-radius: 0;
+    text-decoration:none;
+    border: none;
+    border-bottom: 1px solid fade(black,25%);
+
+    &:hover {
+      text-decoration:none;
+    }
+
+    & + .tab {
+      border-left: 1px solid fade(black,25%);
+    }
+
+    &:not(.active):not(:active):not(.error):not([disabled]) {
+      background: fade(black,25%);
+    }
+
+    &.active {
+      .cursor(default);
+      z-index:2;
+    }
+
+    &.active,&:active {
+      border-bottom-color: transparent;
+      box-shadow: 0px 0px 8px fade(black,50%);
+      flex-shrink:0;
+      text-decoration:none;
+    }
+
+    &[disabled] {
+      .cursor(default);
+      pointer-events: none;
+      background: fade(black,50%);
+      border-bottom-color: fade(black,50%);
+      opacity: 0.5;
+    }
+
+    // &.error {
+    //   background-color: #f00;
+    //   background-blend-mode: darken;
+    // }
+
+  }
+}
+
+.tab-panel {
+  .tab-pane {
+    &:not(.active) {
+      display: none;
+    }
+  }
+}

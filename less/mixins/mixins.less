@@ -1,0 +1,106 @@
+@import 'brand.less';
+@import 'responsive.less';
+@import 'components.less';
+@import 'animations.less';
+
+@navbar-size: 36px;
+
+.no-select() {
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  .cursor(default);
+}
+
+.cursor(@cursor) {
+  cursor: ~"-webkit-@{cursor}";
+  cursor: ~"-moz-@{cursor}";
+  cursor: @cursor;
+}
+
+.filter(@rules) {
+  -webkit-filter: @rules;
+  filter: @rules;
+}
+
+.tint(@opacity) {
+  background-blend-mode: overlay;
+  &::after {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: inherit;
+    opacity: @opacity;
+    z-index: 2;
+    top: -100%;
+  }
+}
+
+.marble-ui() {
+  text-decoration: none;
+  border: none;
+  background: #ddd;
+  color: @color-dark;
+  box-shadow: 0px 1px 1px fade(black,50%);
+  background: url('/images/textures/marble.jpg'), @spotlight;
+  background-blend-mode: soft-light;
+  border-radius: 2px;
+  border: 1px solid fade(black,25%);
+  .inset-text();
+  transition: 0.25s;
+  // &:hover {
+  // 	color: @color-primary;
+  // }
+  &[disabled],&.active {
+    background: url('/images/textures/marble.jpg'), radial-gradient(ellipse 200% 200% at 50% 0%, #ddd 0%, #999 100%);
+    box-shadow: 0 0 1px fade(black,50%);
+    cursor: default;
+    transform: translateY(1px);
+  }
+}
+
+.animation(@rules) {
+  -webkit-animation: @rules;
+  -moz-animation: @rules;
+  -ms-animation: @rules;
+  -o-animation: @rules;
+  animation: @rules;
+}
+
+.darkbox() {
+  color: @color-ui;
+  text-shadow: @color-tooltip;
+  background-image: linear-gradient(135deg, fade(black,95%) 0%, fade(black,25%) 100%);
+  border: 0px;
+  transform: translateX(-2px);
+  .sm-plus({
+		border-left: 2px solid transparent;
+		border-image: linear-gradient(to bottom, @color-ui 0%, fade(@color-ui,0%) 100%);
+		border-image-slice: 1;
+		border-image-outset: 5;
+	});
+}
+
+.inset-text {
+  text-shadow: 0px 1px 1px fade(white,25%), 0px -1px 1px fade(black,25%);
+}
+
+.placeholder(@rules) {
+  &::-webkit-input-placeholder {
+    @rules();
+  }
+  &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    @rules();
+  }
+  &::-moz-placeholder { /* Firefox 19+ */
+    @rules();
+  }
+  &:-ms-input-placeholder { /* IE 10+ */
+    @rules();
+  }
+  &:-moz-placeholder { /* Firefox 18- */
+    @rules();
+  }
+}

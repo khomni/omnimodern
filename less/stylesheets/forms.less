@@ -1,0 +1,270 @@
+@import '../mixins/mixins.less';
+
+::selection,::-webkit-selection {
+	color: white;
+	background-color: @color-primary;
+}
+
+input {
+	&.form-input {}
+}
+
+.form-input {
+	background: white;
+	border: none;
+	padding: 0.5rem;
+	display: block;
+	flex-grow:1;
+	width:100%;
+	transition: color 0.25s, filter 0.25s;
+
+	&[type='radio'],&[type='checkbox'] {}
+
+	& + .form-input {
+		// margin-top: 0.5rem;
+	}
+
+	&.pending {
+		.filter(drop-shadow(0px 0px 4px @color-secondary));
+		color: @color-secondary;
+	}
+
+	&.loading {
+		.filter(drop-shadow(0px 0px 4px @color-primary));
+		color: @color-primary;
+	}
+
+	&.minimal {
+		width: 4em;
+		&::-webkit-inner-spin-button,
+		&::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+	}
+}
+
+label {
+	input[type="file"] {
+		position: absolute;
+		opacity: 0;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+}
+
+.form-group {
+	margin: 1rem auto;
+	display: flex;
+	margin: -0.5em;
+	margin-bottom: 0.5em;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+
+	.form-input, {
+		flex: 1;
+		margin: 0.5em;
+		width: initial;
+		min-width: 0;
+	}
+
+	.checkbox,.radio {
+		margin: 0.5em;
+	}
+
+	.form-group-label {
+		margin: 0.5em;
+		flex-basis: 100%;
+		text-align: center;
+	}
+
+	&.horz {
+		flex-flow: row wrap;
+	}
+
+	&.center {
+		justify-content: center;
+	}
+
+	&.distribute {
+		justify-content: space-around;
+	}
+
+}
+
+.checkbox,.radio {
+	line-height: 1em;
+	margin-right: 0.5em;
+	position: relative;
+	.no-select();
+	input[type='radio'],input[type='checkbox'] {
+		display: block;
+		bottom:0;
+		opacity: 0;
+		pointer-events:none;
+		position:absolute;
+	}
+	span {
+		.cursor(pointer);
+		display: inline-block;
+		vertical-align: middle;
+		&:before {
+			content: "✓";
+			.marble-ui();
+			color: fade(black,20%);
+			margin-right: 0.5em;
+			text-align: center;
+			display: inline-block;
+			width: 1em;
+			height: 1em;
+			vertical-align: middle;
+		}
+	}
+	:checked + span {
+		text-shadow: 0px 0px 4px @color-primary;
+		&:before {
+			color: @color-primary;
+			border-color: #be906f;
+		}
+	}
+	:focus + span {
+		text-shadow+: 0 0 2px @color-primary;
+		&:before {
+			border-color: #be906f;
+			// box-shadow+: 0 0 2px @color-primary;
+		}
+	}
+}
+
+.radio {
+	line-height: 1em;
+	span {
+		&:before {
+			content: "•";
+			border-radius:0.5em;
+		}
+	}
+}
+
+
+button {
+
+	&.as-link {
+		-webkit-appearance: none;
+		background: none;
+		border: none;
+		display: inline;
+		font: inherit;
+		padding: 0;
+		outline: none;
+		outline-offset: 0;
+		/* Additional styles to look like a link */
+		cursor: pointer;
+
+		&[disabled] {
+			color: #999;
+		}
+		// text-decoration: underline;
+	}
+}
+
+a.close,button.close {
+	&:empty {
+		&:before {
+			font-size:24px;
+			content:"×";
+		};
+		&.lg:before {
+			font-size: 48px;
+		};
+	};
+	&.float {
+		position: absolute;
+		right: 0;
+	}
+	&.lg {
+		height: 2em;
+		min-width: 2em;
+		line-height: 2em;
+	}
+	min-width: 1em;
+	font-size: 18px;
+	user-select: none;
+	height: 1em;
+	line-height: 1em;
+	display: flex;
+	justify-content: center;
+	align-items:center;
+	.cursor(pointer);
+	text-decoration:none;
+	color:inherit;
+
+	text-shadow: 0px -1px 1px fade(black,15%), 0px 1px 1px fade(white,15%);
+	-webkit-appearance: none;
+	background: none;
+	outline: none;
+	border: none;
+	opacity: 0.5;
+	font-weight: 600;
+	transition: opacity 0.25s;
+
+	&:hover,&:focus,&:active {
+		opacity: 1;
+		text-decoration:none;
+	}
+}
+
+.btn {
+	.marble-ui();
+	.no-select();
+	.cursor(pointer);
+	text-decoration: none;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 0.8em;
+	padding: 0.4em;
+
+	&:hover,&:focus {
+		color: @color-primary;
+		text-decoration: none;
+	}
+
+	&.block {
+		display: block;
+		margin: auto;
+		&.full {
+			width: 100%;
+		}
+	}
+
+	&[disabled] {
+		color: #999;
+	}
+
+}
+
+.btn-group {
+	display: flex;
+	flex-flow: row wrap;
+
+	.btn {
+		flex: 1;
+		border-radius: 0;
+	}
+}
+
+input,button,select,textarea {
+	&:focus {
+		.filter(drop-shadow(0px 0px 2px @color-primary));
+		outline: none;
+	}
+}
+
+textarea {
+	width: 600px;
+	max-width:100%;
+}

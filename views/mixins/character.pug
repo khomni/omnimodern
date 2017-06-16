@@ -1,0 +1,16 @@
+mixin characterCard(character)
+  if character
+    .character-card-container(id="character-"+character.id data-characterId=character.id)
+      .character-card
+        .character-portrait
+          if character.portrait
+            img(src=character.portrait.src)
+        .character-stats
+          .name(href=character.url)= character.name
+          if currentUser.id === character.ownerId
+            .btn-group
+              a.btn(href=character.url) Character Sheet
+              form(action=character.url+"/select" method="POST")
+                button.btn(type="submit") Set As Main
+              form(action=character.url method="delete" data-response="modal")
+                button.btn(type="submit") Delete

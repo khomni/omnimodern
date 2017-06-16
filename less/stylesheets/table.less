@@ -1,0 +1,51 @@
+table {
+	width: 100%;
+	border-collapse: collapse;
+
+	&.hover {
+		tbody tr {
+			&:hover,&:focus {
+				background: fade(@color-primary,25%);
+			}
+		}
+	}
+
+	thead {
+		tr {
+			border-bottom: 1px solid;
+		}
+	}
+
+	tfoot {
+		tr {
+			border-top: 1px solid;
+		}
+	}
+
+	table td.shrink {
+		white-space:nowrap
+}
+	table td.expand {
+			width: 99%
+	}
+
+	tbody{
+		tr {
+			border-bottom: 1px solid;
+		}
+	}
+
+	tr {
+
+	}
+
+	th {
+		padding: 0.5rem;
+	}
+
+	th,td {
+		text-align:left;
+		padding: 0.25rem;
+		word-break: normal;
+	}
+}
