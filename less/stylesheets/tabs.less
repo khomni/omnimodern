@@ -35,6 +35,8 @@
     border: none;
     border-bottom: 1px solid fade(black,25%);
 
+    transition: 0.25s;
+
     &:hover {
       text-decoration:none;
     }
@@ -67,15 +69,22 @@
       opacity: 0.5;
     }
 
-    // &.error {
-    //   background-color: #f00;
-    //   background-blend-mode: darken;
-    // }
+    &.error {
+      color: @color-primary;
+      background-color: fade(@color-primary,25%);
+      background-blend-mode: darken;
+      outline:none;
+      .filter(none);
+    }
+
+    &.obscured {
+      .filter(saturate(0) brightness(0.25));
+    }
 
   }
 }
 
-.tab-panel {
+.tab-pane-group {
   .tab-pane {
     &:not(.active) {
       display: none;

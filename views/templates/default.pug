@@ -7,7 +7,7 @@ extends /templates/universal
 
 block main
   #modals.modals
-  block navigation
+  //- block navigation
     include /components/navbar
   #content-wrapper
     //- .overlay
@@ -15,5 +15,10 @@ block main
     block header
       +header(headerColor||null)
     #content-main&attributes({class: THEME})
-      block content
+      .tab-group
+        block navigation
+          a.tab(data-click="tab" data-target="main" href="/") Home
+      .tab-pane-group
+        #main.tab-pane
+        //- block content
     block footer

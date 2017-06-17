@@ -18,7 +18,6 @@ document.onreadystatechange = function(){
 
   require('./dataemissions');
   require('./keypress');
-  require('./ui/tabs');
 
   // add document-level event listeners for the application
   require('./listeners');

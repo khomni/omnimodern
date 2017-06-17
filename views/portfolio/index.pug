@@ -1,0 +1,6 @@
+.content
+  if projects
+    each project in projects
+      hr
+  if currentUser.admin
+    a.btn(data-click="modal" data-target="new-project" href="/project/new") New Project

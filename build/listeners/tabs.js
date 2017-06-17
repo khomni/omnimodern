@@ -36,8 +36,15 @@ document.addEventListener('show.tab', function(e){
   }
 
   target.addEventListener('loaded.pane', function tabLoaded(e){
-    target.dispatchEvent(new Event('show.pane', {bubbles:true, cancelable:true}))
+    // exampine the tab's XHR response
+    let xhr = e.detail;
+    // remove this listener after it fires
     target.removeEventListener('loaded.pane', tabLoaded)
+    
+    source.classList.remove('error','obscured');
+    if(xhr.status >= 500 && xhr.status < 600) return source.classList.add('error');
+    if(xhr.status >= 400 && xhr.status < 500) return source.classList.add('obscured');
+    target.dispatchEvent(new Event('show.pane', {bubbles:true, cancelable:true}))
   })
 
     // target.classList.add('active');
@@ -48,11 +55,17 @@ document.addEventListener('load.pane', function(e){
   let href = thisPane.getAttribute('href');
   if(!href) return false;
 
-  Ajax.html({url:href, method:'get'})
-  .then(html => {
-    thisPane.classList.remove('error')
-    thisPane.innerHTML = html
-    thisPane.dispatchEvent(new Event('loaded.pane', {bubbles:true, cancelable:true}));
+  Ajax.fetch({url:href, method:'get', headers:{'Accept': 'text/html', 'X-Tab-Content': true}})
+  .then(xhr => {
+    // send the xhr resonse to the tab
+    thisPane.dispatchEvent(new CustomEvent('loaded.pane', {detail: xhr, bubbles:true, cancelable:true}));
+
+    let html = xhr.responseText
+
+    if(xhr.getResponseHeader('X-Modal')) return Modal.methods.createModal(html);
+
+    thisPane.classList.remove('error');
+    thisPane.innerHTML = html;
   })
   .catch(err => {
     thisPane.classList.add('error')

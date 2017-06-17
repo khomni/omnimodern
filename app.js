@@ -19,7 +19,7 @@ var app = express();
 
 
 var browserify = require('browserify-middleware');
-// app.use('/javascripts', browserify('./build'));
+app.use('/javascripts', browserify('./build'));
 
 /*
 if(app.get('env') != 'production') {
@@ -103,18 +103,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use((req,res,next) => {
-  // permission object passed between routers to determine the level of permission available to the user
-  res.locals.permission = {write: false, read: false}
-  Object.seal(res.locals.permission)
 
   res.locals.currentUser = req.user || false
   res.locals.THEME = req.session.theme || 'marble'
   res.locals.breadcrumbs = []
   next();
 });
-
-// set the user's main character if applicable
-app.use(require('./middleware/activeChar'));
 
 app.use('/', (req,res,next)=>{
   if(/\.json(.*)?$/.test(req.url)) {

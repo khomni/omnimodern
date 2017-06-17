@@ -126,7 +126,8 @@ a.no-link {
 
 hr {
   border: none;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid fade(black,25%);
+  border-bottom: 1px solid fade(white,25%);
 }
 
 blockquote {
@@ -285,10 +286,6 @@ header {
   background-attachment: local, fixed;
   flex: 1;
   z-index: 2;
-  .content-body {
-    .sm-plus({
-    });
-  }
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -305,7 +302,6 @@ p {
 }
 
 .content-body {
-
   .sm-plus({
     padding: 1em 0;
   });
@@ -434,25 +430,11 @@ section {
     }
   }
 
-  &.js {
-    justify-content: flex-start;
-  }
-
-  &.as {
-    align-items: flex-start;
-  }
-
-  &.je {
-    justify-content: flex-end;
-  }
-
-  &.ae {
-    align-items: flex-end;
-  }
-
-  &.distribute {
-    justify-content: space-around;
-  }
+  &.js { justify-content: flex-start }
+  &.as { align-items: flex-start }
+  &.je { justify-content: flex-end }
+  &.ae { align-items: flex-end }
+  &.distribute { justify-content: space-around }
 
   &.uniform {
     &>*{
@@ -460,17 +442,16 @@ section {
     }
   }
 
-  &.vert {
-    flex-direction:column;
-  }
-  &.row {
-    flex-flow:row;
-  }
-
+  &.vert { flex-direction:column }
+  &.row { flex-flow:row }
 }
 
-.text-center {
-  text-align:center;
+.text-center { text-align: center }
+
+.content {
+  max-width: 100%;
+  width: 920px;
+  margin: auto;
 }
 
 .error {

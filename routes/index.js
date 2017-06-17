@@ -4,25 +4,28 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models');
 
-var fs = require('fs');
-var path = require('path');
-var basename = path.basename(module.filename);
-
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
+  if(req.isTab) return res.render('home');
   return res.render('index');
 });
 
-router.get('/login',(req,res,next)=>{
-  if(req.modal) return res.render('users/_login');
-  return res.render('users/login');
-});
+router.route('/login')
+.get((req,res,next) => {
+  if(req.user) return next(Common.error.request('Already Logged In'))
 
-router.post('/login', (req,res,next) => {
-  var origin = req.headers.referer || '/';
+  return db.User.count()
+  .then(n => {
+    if(!n) return res.set('X-Modal', true).render('users/_signup');
+    return res.set('X-Modal', true).render('users/_login');
+  })
+  .catch(next)
+
+})
+.post((req,res,next) => {
 
   passport.authenticate('local', (err,user,info) => {
     if (err) return next(err);
@@ -30,44 +33,42 @@ router.post('/login', (req,res,next) => {
 
     req.logIn(user, err => {
       if (err) return next(err);
-
       return res.set('X-Redirect', origin).sendStatus(200);
-      return res.redirect(origin);
     })
   })(req, res, next)
-});
 
-router.use('/logout',(req,res,next) => {
-  req.logOut();
-  req.session.destroy(()=>{
-    res.clearCookie('Session');
-    return res.redirect('/');
-  })
-});
+})
 
-router.get('/signup',(req,res,next)=>{
-  if(req.modal) return res.render('users/_signup');
-  return res.render('users/signup');
-});
-
+// signup route is only for kyle. If other users are needed, they'll be added a different way
 router.post('/signup', (req,res,next) => {
-  var origin = req.headers.referer || '/';
-  var user = db.User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password
-  },{fields:['username','email','password']})
-  .then(user => {
-    req.logIn(user, err => {
-      if(req.xhr) return res.set('X-Redirect', user.url).sendStatus(302);
-      return res.redirect(origin);
+  return db.User.count()
+  .then(n => {
+    if(n) throw null; // stealth route
+
+    return db.User.create({
+      username: "kyle",
+      name: "Kyle",
+      admin: true, // first user gets admin priv of course
+      password: req.body.password,
+    })
+    .then(user => {
+
+      req.logIn(user, err => {
+        if (err) return next(err);
+        return res.set('X-Redirect', '/').sendStatus(200);
+      })
+      
     })
   })
-  .catch(next);
-});
+  .catch(next)
+})
+
 
 router.get('/about', (req, res, next) => {
-  res.render('about');
-});
+  if(req.isTab) return res.render('about') 
+  return res.redirect('/')
+})
+router.use('/portfolio', require('./portfolio'));
+router.use('/blog', require('./blog'));
 
 module.exports = router;

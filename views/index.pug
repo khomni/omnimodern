@@ -1,9 +1,20 @@
 extends /templates/default
   
-block header
+//- block header
   +header(class="fullscreen")
     .header-item.page-title 
       span
         +logo()
       span homebre.ws
     .header-item A tool to help manage homebrew tabletop adventures
+
+append navigation
+  a.tab(data-click="tab" data-target="main" href="/about" data-reload) About
+  a.tab(data-click="tab" data-target="main" href="/blog" data-reload) Blog
+  a.tab(data-click="tab" data-target="main" href="/portfolio" data-reload) Portfolio
+  if !currentUser
+    a.tab(data-click="modal" data-target="login" href="/login") Admin
+
+//- block content
+  #portfolio.tab-pane Portfolio
+  #blog.tab-pane Blog

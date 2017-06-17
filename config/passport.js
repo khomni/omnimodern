@@ -10,7 +10,7 @@ passport.serializeUser(function(user, done){
 
 //Deserialize Sessions
 passport.deserializeUser(function(user, done){
-  return db.User.scope('session').find({ where: {id: user.id} })
+  return db.User.find({ where: {id: user.id} })
   .then(user => {
     return done(null, user)
   })
@@ -18,9 +18,9 @@ passport.deserializeUser(function(user, done){
 });
 
 // For Authentication Purposes
-passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password', passReqToCallback: true},
-  function(req, email, password, done){
-    var user = db.User.find({where: {$or: [{email: email}, {username: email}]}})
+passport.use(new LocalStrategy({usernameField: 'username', passwordField: 'password', passReqToCallback: true},
+  function(req, username, password, done){
+    var user = db.User.find({where: {username:username}})
     .then(user => {
       if(!user) return done(null)
       let passwd = user ? user.password : ''

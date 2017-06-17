@@ -1,8 +1,5 @@
 include ./filters
-include ./character
-include ./quest
 include ./comments
-include ./calendar
 
 mixin delete(object, options)
   -options = options || {}
@@ -41,6 +38,6 @@ mixin header(options)
   header#header&attributes(attributes)
     .header-content
       block
-      if breadcrumbs.length > 0
+      if breadcrumbs && breadcrumbs.length > 0
         .header-item
           include /components/breadcrumbs

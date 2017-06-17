@@ -1,12 +1,5 @@
 "use strict";
 
-/* COMMENT
-    Comments are any interaction to a commentable document:
-      - Journals
-      - Quests
-      - Lore
-*/
-
 module.exports = function(sequelize, DataTypes) {
   var Comment = sequelize.define("Comment", {
     commentable: { // the model being commented on
@@ -29,7 +22,6 @@ module.exports = function(sequelize, DataTypes) {
     freezeTableName: true,
     classMethods: {
       associate: function(models) {
-        // all comments either have a speaking character or a speaking user
         Comment.belongsTo(models.User)
       }
     }

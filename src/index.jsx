@@ -5,9 +5,7 @@ import Navbar, {Navlink} from './components/navigation.jsx'
 
 class Main extends React.Component {
   render() {
-    return <div id="content-main">
-      <Navbar/>
-    </div>
+    return <div id="content-main"></div>
   }
 }
 

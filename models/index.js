@@ -31,10 +31,13 @@ db._associate = function(){
 
 // associates the models and syncs to the database
 db._sync = Promise.method(function(){
-
   db._associate();
 
-  return sequelize.sync({force:CONFIG.database.forcesync})
+  return Promise.try(()=>{
+    if(CONFIG.database.forcesync) return sequelize.drop()
+    return;
+  })
+  .then(() => sequelize.sync() )
   .catch(err => {
     console.log(err)
     return null;

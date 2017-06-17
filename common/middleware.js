@@ -7,7 +7,7 @@ const multer = require('multer');
 
 module.exports = {
   // given a req.body with a number of dot-delimited field names, converts the req.body into the corresponding object
-  objectifyBody: (req,res,next) => {
+  objectify: (req,res,next) => {
     // console.log("1:",req.body)
 
     for(var key in req.body) {
@@ -33,6 +33,30 @@ module.exports = {
     // console.log("2:", req.body)
     req.body = flat.unflatten(req.body)
     // console.log("3:", JSON.stringify(req.body,null,'  '))
+    return next();
+  },
+
+  querify: (req,res,next) => {
+
+    // returns converted input (recursive)
+    function convert(input) {
+      if(/[,;]/gi.test(input)) {
+        return input.split(/[,;]/gi).map(convert)
+      }
+
+      if(input.toLowerCase() === 'true') return true
+      if(input.toLowerCase() === 'false') return false
+
+      if(input==undefined || input=='') return undefined;
+      if(!isNaN(Number(input))) return Number(input)
+      return input
+    }
+
+    Object.keys(req.query).forEach(key => {
+      let query = req.query[key]
+      req.query[key] = convert(query)
+    })
+
     return next();
   },
 

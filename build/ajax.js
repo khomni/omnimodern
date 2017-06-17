@@ -113,7 +113,7 @@ Ajax.setListeners = function() {
       body:thisForm
     })
     .then(xhr => {
-      if(xhr.getResponseHeader('X-Redirect')) return window.location = xhr.getResponseHeader('X-Redirect')
+      if(xhr.getResponseHeader('X-Redirect')) return window.location = xhr.getResponseHeader('X-Redirect');
 
       // if the router responds with JSON data, emit it from the form as a 'data' event
       var contentType = xhr.getResponseHeader('Content-Type') || []
@@ -140,13 +140,13 @@ Ajax.setListeners = function() {
           reaction = document.createElement('div')
           reaction.innerHTML = html
           var elems = Array.prototype.slice.call(reaction.childNodes)
-          console.log(target)
           elems.map(e=>{target.parentNode.insertBefore(e,target)})
           target.remove();
         }
         return;
       }
-      return Modal.methods.createModal(html);
+
+      // return Modal.methods.createModal(html);
     })
     .catch(err =>{
       console.error(err)

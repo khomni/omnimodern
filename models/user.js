@@ -5,32 +5,17 @@ Promise.promisifyAll(bcrypt)
 
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
-    // identifier: {
-    //   type: DataTypes.STRING,
-    //   primaryKey: true
-    // },
-    username: {
+    username: {//alphanumeric username, suitable for routes
       type: DataTypes.STRING,
       unique: true,
-      allowNull: false,
+      index:true,
+      len: [2,32],
       validate: {
-        isAlphanumeric: true,
-        len: [2,16]
+        is: /^[a-z0-9_-]+$/i
       }
     },
-    url: {
-      type: DataTypes.VIRTUAL,
-      get: function(){
-        return '/u/' + this.username
-      }
-    },
-    email: {
+    name: { // will display on blog posts, etc
       type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-      validate: {
-        isEmail: true
-      }
     },
     password: {
       type: DataTypes.STRING,
@@ -38,21 +23,10 @@ module.exports = function(sequelize, DataTypes) {
         notEmpty: true
       }
     },
-    admin: {
+    admin: { // just in case at some point in the future I need other users for this blasted thing
       type: DataTypes.BOOLEAN
     }
   }, {
-    scopes: {
-      public: {
-        attributes: {exclude: ['password','email']}
-      }
-    },
-    indexes: [
-      {
-        unique: true,
-        fields: ['email']
-      },
-    ],
     classMethods: {
       associate: function(models) {
         
@@ -85,5 +59,6 @@ module.exports = function(sequelize, DataTypes) {
       })
     })
   });
+
   return User;
 };

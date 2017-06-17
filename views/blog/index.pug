@@ -1,0 +1,6 @@
+.content
+  if blogposts
+    each post in blogposts
+      hr
+  if currentUser.admin
+    a.btn(data-click="modal" data-target="new-blog" href="/blog/new") New Blog Post

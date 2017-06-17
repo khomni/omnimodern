@@ -93,7 +93,7 @@ var methods = {
     // the only document level listener required to create new Modals
     document.body.addEventListener('click', e => {
       var spawner
-      var spawner = e.target.closest('[data-response="modal"]')
+      var spawner = e.target.closest('[data-click="modal"]')
 
       if(!spawner) return true;
       e.preventDefault();
