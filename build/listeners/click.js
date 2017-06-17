@@ -25,6 +25,8 @@ var dom = require('./dom.js');
     }
 
     if(clickAction == 'tab' && source.dataset.target) {
+      // let href = source.getAttribute('href')
+      // if(href) history.pushState({href: href}, null, href)
       return source.dispatchEvent(new Event('show.tab', {bubbles:true, cancelable:true}))
       // return dom.tab(source)
     }

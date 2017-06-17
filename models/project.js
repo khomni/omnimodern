@@ -6,15 +6,11 @@ module.exports = function(sequelize, DataTypes) {
     url: { // a routeable URL for this project
       type: DataTypes.STRING,
       unique: true,
-      index:true,
-      set: function(val) {
-        val = val.replace(/[^a-zA-Z0-9_-\s]/gi,'').split(/\s+/).reduce((a,b) => { // make sure only complete words are encoded
-          var length = a.reduce((a,b) => {return a+b.length+1},0)
-          if(length + b.length < 32) a.push(b)
-          return a
-        },[]).join('-')
-        this.setDataValue('url', val)
-      },
+      index: true,
+      allowNull: false,
+      validate: {
+        is: /^[a-z0-9_-]+$/i
+      }
     },
 
     title: { // The Title of the Project
@@ -34,7 +30,7 @@ module.exports = function(sequelize, DataTypes) {
     status: {
       type: DataTypes.ENUM,
       defaultValue: 'planning',
-      values: ['planning', 'in progress', 'suspended', 'abandoned', 'finished']
+      values: ['planning', 'in-progress', 'suspended', 'abandoned', 'finished']
     },
 
     archived: {
@@ -47,8 +43,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     classMethods: {
       associate: function(models) {
-        
-        Project.hasMany(models.BlogPost);
+
+        Project.hasMany(models.BlogPost, {onDelete: 'cascade'});
 
         Project.hasMany(models.Image, {
           // as: 'images',
@@ -57,7 +53,12 @@ module.exports = function(sequelize, DataTypes) {
           scope: {
             imageable: 'Project'
           },
+          onDelete: 'cascade',
         });
+
+        Project.addScope('defaultScope', {
+          include: [{model:models.Image}]
+        }, {override: true})
       }
     }
   });

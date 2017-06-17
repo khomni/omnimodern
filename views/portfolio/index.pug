@@ -1,6 +1,8 @@
 .content
   if projects
     each project in projects
+      include ./_project
       hr
   if currentUser.admin
-    a.btn(data-click="modal" data-target="new-project" href="/project/new") New Project
+    .flex.center.pad
+      a.btn(data-click="modal" data-target="new-project" href="/portfolio/new") New Project

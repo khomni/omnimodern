@@ -1,0 +1,36 @@
+.modal-dialog
+  .modal-content
+    if project
+      .modal-title Update Project
+    else
+      .modal-title New Project
+    .modal-body 
+      form(name='project' action='/portfolio/'+(project&&project.url||'') method=project&&'patch'||'post')
+        .flex.vert.pad
+          .flex.vert
+            input.form-input(name='title' placeholder="Project Title" value=project&&project.title required)
+
+          .flex.vert
+            input.form-input(name='url' placeholder="URL" pattern="^[a-zA-Z0-9_-]+$" value=project&&project.url  required)
+
+          .flex.vert
+            input.form-input(name='category' placeholder="Category" value=project&&project.category required)
+
+          .flex.vert
+            select.form-input(name="status")
+              option(value="planning" selected=project&&project.status=="planning") Planning
+              option(value="in-progress" selected=project&&project.status=="in-progress") In-Progress
+              option(value="suspended" selected=project&&project.status=="suspended") Suspended
+              option(value="abandoned" selected=project&&project.status=="abandoned") Abandoned
+              option(value="finished" selected=project&&project.status=="finished") Finished
+          .flex.vert
+            textarea.form-input(name='description')= project&&project.description||''
+
+          .flex.vert.center
+            label.checkbox
+              input(type="checkbox" name="archived" checked=project&&project.archived value="true" default="false")
+              span Archived
+            
+
+        button.btn.block(type='submit')= project && 'Update Project' || 'Add Project'
+

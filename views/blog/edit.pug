@@ -1,0 +1,23 @@
+.modal-dialog
+  .modal-content
+    if project
+      .modal-title Update Blog Post
+    else
+      .modal-title New Blog Post
+    .modal-body 
+      form(name='blog' action=action method=blogpost&&'patch'||'post')
+        .flex.vert.pad
+          .flex.vert
+            input.form-input(name='title' placeholder="Post Title" value=blogpost&&blogpost.title required)
+
+          .flex.vert
+            textarea.form-input(name='body')= blogpost&&blogpost.body||''
+
+          .flex.vert.center
+            label.checkbox
+              input(type="checkbox" name="archived" checked=project&&project.archived value="true" default="false")
+              span Archived
+            
+
+        button.btn.block(type='submit')= blogpost && 'Update Blog Post' || 'Add Blog Post'
+

@@ -1,5 +1,14 @@
+// window.addEventListener('popstate', e => {
+//   let triggerTab = document.querySelector('.tab[href="'+e.state.href+'"]')
+//   if(!triggerTab) return true;
 
-document.addEventListener('show.tab', function(e){
+//   triggerTab.dispatchEvent(new Event('show.tab', {bubbles:true, cancelable:true}))
+//   e.preventDefault();
+//   return false;
+// });
+
+
+document.addEventListener('show.tab', function(e) {
   let source = e.target;
   let target = document.getElementById(source.dataset.target) || document.querySelector(source.dataset.target);
 
@@ -44,6 +53,7 @@ document.addEventListener('show.tab', function(e){
     source.classList.remove('error','obscured');
     if(xhr.status >= 500 && xhr.status < 600) return source.classList.add('error');
     if(xhr.status >= 400 && xhr.status < 500) return source.classList.add('obscured');
+
     target.dispatchEvent(new Event('show.pane', {bubbles:true, cancelable:true}))
   })
 

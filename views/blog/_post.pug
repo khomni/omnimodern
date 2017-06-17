@@ -1,0 +1,15 @@
+if !post.archived || currentUser && currentUser.admin
+  .blogpost(class=post.archived&&'obscured'||'')
+    h2= post.title
+    label(data-time=post.updatedAt.getTime())
+    if post.body
+      != markdown(post.body_preview)
+
+    pre= JSON.stringify(post,null,'  ')
+    if post.Project
+      div #[label Project:] #[a(href="/portfolio/" + post.Project.url)= post.Project.title]
+    
+    if currentUser
+      form(action='/blog/' + post.slug).flex.center.pad
+        a.btn(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit') Edit Post
+        button.btn(formmethod="delete") Delete Post

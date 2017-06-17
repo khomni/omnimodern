@@ -13,7 +13,7 @@ const s3 = new AWS.S3({
 });
 
 router.get('/*', (req,res,next) => {
-  let key = req.params[0]
+  let key = '/' + req.params[0]
 
   return db.Image.findOne({where: {key: key}})
   .then(image => {

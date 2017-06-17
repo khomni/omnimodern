@@ -107,7 +107,7 @@ Ajax.setListeners = function() {
       method: method, // supports PUT PATCH DELETE POST
       url: action,
       headers:{ // allow the form to suggest ways of receiving the data
-        modal: thisForm.dataset.response == 'modal',
+        modal: true,
         Accept: thisForm.dataset.response == 'json' ? 'application/json' : undefined,
       },
       body:thisForm
@@ -177,7 +177,7 @@ Ajax.fetch = Promise.method(function(args) {
 
       Object.assign(headers, args.headers)
 
-      xhr.open(args.method, args.url)
+      xhr.open(args.method.toUpperCase(), args.url)
 
       for(let key in headers) xhr.setRequestHeader(key, headers[key]);
 
@@ -190,8 +190,8 @@ Ajax.fetch = Promise.method(function(args) {
         }
       }
 
-      xhr.onerror = function() {
-        return reject(xhr)
+      xhr.onerror = function(e) {
+        return reject(new Error('An error occurred with the XHR Request'))
       }
 
     })

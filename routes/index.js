@@ -70,5 +70,6 @@ router.get('/about', (req, res, next) => {
 })
 router.use('/portfolio', require('./portfolio'));
 router.use('/blog', require('./blog'));
+router.use('/i', require('./images'));
 
 module.exports = router;

@@ -42,9 +42,10 @@ module.exports = function(sequelize, DataTypes) {
     })
   };
 
-  User.hook('beforeSave', function(user, options) {
+  function hashPassWord(user, options) {
     return Promise.try(()=>{
-      if(!user.changed('password')) return user; // if password wasn't changed, skip the password hashing
+      if(user.password && !user.changed('password')) return user; // if password wasn't changed, skip the password hashing
+      console.log('hashing password')
 
       options.updatesOnDuplicate = options.updatesOnDuplicate || [];
       options.updatesOnDuplicate.push('password');
@@ -58,7 +59,11 @@ module.exports = function(sequelize, DataTypes) {
         })
       })
     })
-  });
+  }
+
+  User.hook('beforeSave', hashPassWord);
+  User.hook('beforeCreate', hashPassWord);
+  User.hook('beforeUpdate', hashPassWord);
 
   return User;
 };

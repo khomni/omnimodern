@@ -16,8 +16,6 @@ router.get('/', (req,res,next) => {
 router.post('/', Common.middleware.requireUser, Common.middleware.bufferFile.array('files', CONFIG.aws.PER_RESOURCE_LIMIT), (req,res,next) => {
   // throw an error if there's no resource
   if(!res.locals.imageable) return next(Common.error.notfound('Could not locate the imageable resource'));
-  // throw an error if the user does not own the resource
-  if(!req.user.controls(res.locals.imageable).owner) return next(Common.error.notfound('You do not have permission to upload to this resource'));
   // throw an error if the operation would give the resource too many images
   if(res.locals.imageable.Images.length + req.files.length > CONFIG.aws.PER_RESOURCE_LIMIT) {
     return next(Common.error.request('You can only upload a maximum of ' + CONFIG.aws.PER_RESOURCE_LIMIT + ' images to this resource'))
@@ -73,7 +71,6 @@ imageRouter.get('/', (req,res,next) => {
 
 imageRouter.delete('/', Common.middleware.requireUser, Common.middleware.confirmDelete('remove'), (req,res,next) => {
   if(!res.locals.image) return next();
-  if(!req.user.controls(res.locals.imageable).owner) return next(Common.error.notfound('You do not have permission to upload to this resource'));
 
   return res.locals.image.destroy()
   .then(()=>{

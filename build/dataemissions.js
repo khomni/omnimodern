@@ -12,17 +12,14 @@
     if(!source.dataset.reaction) return false;
 
     if(source.dataset.reaction == 'reload') {
-      console.log(source, 'reload')
       return source.dispatchEvent(new Event('reload', {bubbles:true, cancelable:true}))
     }
 
     if(source.dataset.reaction == 'remove') {
       if(!Array.isArray(data)) data = [data]
 
-      console.log(data)
       data.map(deletable => {
         var elements = Array.prototype.slice.call(document.querySelectorAll("[data-ref='"+deletable.ref.id+"'][data-kind='"+deletable.kind+"']"))
-        console.log(elements)
         elements.map(element=>{element.remove()})
       })
 
@@ -31,7 +28,6 @@
 
     // I. fills in input fields with the response data
     if(source.dataset.reaction == 'fill') {
-      console.log(data)
       for(var key in data) {
         var fields = Array.prototype.slice.call(document.getElementsByName(key))
         fields.map(field => {field.value = data[key]})
