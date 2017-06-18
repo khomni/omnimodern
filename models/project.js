@@ -56,9 +56,27 @@ module.exports = function(sequelize, DataTypes) {
           onDelete: 'cascade',
         });
 
-        Project.addScope('defaultScope', {
+        Project.addScope('defaultScope',{
+          where: {archived: false},
+          order: [['updatedAt','DESC']],
+        },{override:true})
+
+        Project.addScope('images', {
           include: [{model:models.Image}]
-        }, {override: true})
+        })
+
+        Project.addScope('blogs', {
+          include: [{model:models.BlogPost}]
+        })
+
+        Project.addScope('blogsPreview', {
+          include: [{
+            model: models.BlogPost, 
+            required: false,
+            order: [['createdAt','DESC']], 
+            limit: 5
+          }]
+        })
       }
     }
   });

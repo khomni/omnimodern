@@ -3,16 +3,17 @@ include ./comments
 
 mixin pagination(pageObject)
   - var symbol = /\?/.test(pageObject.baseUrl) ? "&" : "?"
-  .tab-group
-    case pageObject.page
-      when 1
-        a.tab(href=pageObject.baseUrl data-click="tab" data-target="main" disabled=(pageObject.page<=1)) Back
-      default
-        a.tab(href=pageObject.baseUrl + symbol + "page=" + (pageObject.page-1) data-click="tab" data-target="main" disabled=(pageObject.page<=1)) Back
+  if pageObject.pages > 1 || pageObject.page > 1
+    .tab-group
+      case pageObject.page
+        when 1
+          a.tab(href=pageObject.baseUrl data-click="tab" data-target="main" disabled=(pageObject.page<=1)) Back
+        default
+          a.tab(href=pageObject.baseUrl + symbol + "page=" + (pageObject.page-1) data-click="tab" data-target="main" disabled=(pageObject.page<=1)) Back
 
-    - let i = 1;
-    while i <= pageObject.totalpages
-      a.tab(href=pageObject.baseUrl + symbol + "page=" + i disabled=(i==pageObject.page))= i
-      - i++
+      - let i = 1;
+      while i <= pageObject.totalpages
+        a.tab(href=pageObject.baseUrl + symbol + "page=" + i disabled=(i==pageObject.page))= i
+        - i++
 
-    a.tab(href=pageObject.baseUrl + symbol + "page=" + (pageObject.page+1) data-click="tab" data-target="main" disabled=(pageObject.page >= pageObject.totalpages)) Next
+      a.tab(href=pageObject.baseUrl + symbol + "page=" + (pageObject.page+1) data-click="tab" data-target="main" disabled=(pageObject.page >= pageObject.totalpages)) Next

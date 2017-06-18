@@ -40,7 +40,7 @@ router.post('/', Common.middleware.requireUser, Common.middleware.objectify, (re
     return db.BlogPost.create(Object.assign(req.body, {UserId: req.user.id}))
   })
   .then(blogpost => {
-    return res.set('X-Redirect', '/blog').sendStatus(302)
+    return res.set('X-Redirect', req.baseUrl + '/' + blogpost.slug).sendStatus(302)
   })
   .catch(next)
 })

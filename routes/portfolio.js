@@ -37,15 +37,13 @@ router.get('/', Common.middleware.querify, (req, res, next) => {
 
     if(res.locals.category) res.locals.total = res.locals.aggregation[res.locals.category]
 
-
     res.locals.pages = Math.ceil(res.locals.total / limit)
 
-    return db.Project.findAll({ 
+    return db.Project.scope(['blogsPreview','images']).findAll({
       where: query,
       limit: limit, 
       offset: offset, 
-      order: [['updatedAt','DESC']], 
-      include:[{scope: null, where:{archived:false}, model:db.BlogPost, order:[['createdAt','DESC']], limit:5}]
+      order: [['updatedAt','DESC']]
     })
     .then(projects => {
       res.locals.projects = projects
@@ -80,7 +78,9 @@ router.post('/', Common.middleware.requireUser, Common.middleware.objectify, (re
 let projectRouter = express.Router({mergeParams:true});
 
 router.use('/:url', (req,res,next) => {
-  db.Project.find({where:{url:req.params.url}, include:[{model:db.BlogPost}]})
+  db.Project.scope(['images']).find({where:{url:req.params.url}, include:[
+    {model:db.BlogPost, limit: 3}
+    ]})
   .then(project => {
     res.locals.project = project
 

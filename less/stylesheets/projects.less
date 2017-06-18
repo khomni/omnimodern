@@ -46,4 +46,18 @@
     border-left: 2px solid fade(black,25%);
     padding-left: 0.5em;
   }
+
+  
+}
+
+&.truncated {
+
+  *:nth-last-child(1) { 
+    opacity: 0.5;
+    .filter(blur(1px));
+  }
+  *:nth-last-child(2) {
+    opacity: 0.75;
+    .filter(blur(0.5px));
+  }
 }

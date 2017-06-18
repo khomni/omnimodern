@@ -18,9 +18,14 @@ module.exports = function(sequelize, DataTypes) {
       get: function(){
         if(this.body) {
           let preview = (this.body||"").split(/\n+/).slice(0,3).join('\n\n')
-          if(preview != this.body) preview += "\n\n ..."
           return preview
         }
+      }
+    },
+    truncated: {
+      type: DataTypes.VIRTUAL, 
+      get: function(){
+        return (this.body||"").split(/\n+/).length > 3
       }
     },
     archived: { // blog post has been archived
@@ -46,7 +51,9 @@ module.exports = function(sequelize, DataTypes) {
           onDelete: 'cascade',
         });
 
-        BlogPost.addScope('defaultScope',{
+        BlogPost.addScope('defaultScope', {
+          order: [['createdAt','DESC']],
+          where: {archived: false},
           include: [{model:models.User},{model:models.Image}]
         }, {override: true})
 
