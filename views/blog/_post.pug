@@ -1,15 +1,33 @@
 if !post.archived || currentUser && currentUser.admin
-  .blogpost(class=post.archived&&'obscured'||'')
-    h2= post.title
-    label(data-time=post.updatedAt.getTime())
-    if post.body
-      != markdown(post.body_preview)
+  section.project(class=post.archived&&'obscured'||'').flex.horz.row.as.js
+    if post.Images && post.Images.length > 0
+        .project-image.flex.vert
+          a(href=action + '/' + post.slug + '/images/' + post.Images[0].id data-click="modal")
+            img.preview-photo(src=post.Images[0].path)
+          if post.Images.length > 1
+            .flex.center: label.project-detail #{project.Images.length} Images
+    .flex.vert.grow
+      .project-subsection
+        .flex.horz
+          a.project-title(href="/blog/" + post.slug data-click="tab" data-target="main")= post.title
+          .flex.grow.je.center
+            label.timestamp(data-time=post.updatedAt.getTime())
+      if post.Project
+        .project-subsection
+          .flex.horz
+            .project-subsection.flex.vert.grow
+              .project-detail by #{post.User.name}
+              .project-detail for #[a(href="/portfolio/" + post.Project.url data-click="tab" data-target="main")= post.Project.title]
+              .project-detail in #[a(href="/portfolio?category=" + post.Project.category data-click="tab" data-target="main")= post.Project.category]
+      .project-subsection
+        if post.body
+          != markdown(post.body_preview)
 
-    pre= JSON.stringify(post,null,'  ')
-    if post.Project
-      div #[label Project:] #[a(href="/portfolio/" + post.Project.url)= post.Project.title]
+      //- pre= JSON.stringify(post,null,'  ')
     
-    if currentUser
-      form(action='/blog/' + post.slug).flex.center.pad
-        a.btn(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit') Edit Post
-        button.btn(formmethod="delete") Delete Post
+      if currentUser
+        .project-subsection
+            .flex.grow.vert: .flex.horz
+              form(action='/blog/' + post.slug).flex.center.pad
+                a.btn(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit') Edit Post
+                button.btn(formmethod="delete") Delete Post

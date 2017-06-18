@@ -102,13 +102,6 @@ var passport = require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use((req,res,next) => {
-
-  res.locals.currentUser = req.user || false
-  res.locals.THEME = req.session.theme || 'marble'
-  res.locals.breadcrumbs = []
-  next();
-});
 
 app.use('/', (req,res,next)=>{
   if(/\.json(.*)?$/.test(req.url)) {
@@ -116,6 +109,14 @@ app.use('/', (req,res,next)=>{
     req.url = req.url.replace(/\.json(.*)?$/,'')
   }
   return next();
+});
+
+app.use((req,res,next) => {
+  res.locals.headerImage = "/images/header.png"
+  res.locals.currentUser = req.user || false
+  res.locals.THEME = req.session.theme || 'marble'
+  res.locals.breadcrumbs = []
+  next();
 });
 
 app.use(require('./middleware/requests'));

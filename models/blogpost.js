@@ -37,8 +37,17 @@ module.exports = function(sequelize, DataTypes) {
         BlogPost.hasMany(models.Comment);
         BlogPost.belongsTo(models.Project, {onDelete:'cascade', constraints:false});
 
+        BlogPost.hasMany(models.Image, {
+          foreignKey: 'imageable_id',
+          constraints: false,
+          scope: {
+            imageable: 'BlogPost'
+          },
+          onDelete: 'cascade',
+        });
+
         BlogPost.addScope('defaultScope',{
-          include: [{model:models.User}]
+          include: [{model:models.User},{model:models.Image}]
         }, {override: true})
 
       }
@@ -46,7 +55,6 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   function generateSlug(post, options) {
-    console.log('generate slug', post.changed('title'))
     if(post.slug && !post.changed('title')) return post;
 
     let originalUrl = post.getDataValue('slug');
@@ -59,7 +67,6 @@ module.exports = function(sequelize, DataTypes) {
 
     return Promise.while(()=>!isUnique,()=>{
       post.slug = slugIteration;
-      console.log(post.slug)
 
       return BlogPost.count({where: {slug: {$eq: slugIteration, $not: originalUrl}}})
       .then(n => {

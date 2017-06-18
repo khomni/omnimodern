@@ -19,7 +19,6 @@ module.exports = function(sequelize, DataTypes) {
     url: { // returns the complete link to the s3 resource
       type: DataTypes.VIRTUAL,
       get: function() {
-        console.log(this.getDataValue('s3'))
         return 'https://s3-' + this.getDataValue('s3.region') + '.amazonaws.com/' + this.getDataValue('s3.bucket') + '/' + this.getDataValue('s3.key')
       }
     },

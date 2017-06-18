@@ -13,12 +13,17 @@ block main
     //- .overlay
       +characterCard(activeChar)
     block header
-      +header(headerColor||null)
+      header#header
+        if headerImage
+          img.header-image(src=headerImage)
     #content-main&attributes({class: THEME})
       .tab-group
         block navigation
           a.tab(data-click="tab" data-target="main" href="/") Home
+          a.tab(data-click="tab" data-target="main" href="/about" data-reload) About
+          a.tab(data-click="tab" data-target="main" href="/blog" data-reload) Blog
+          a.tab(data-click="tab" data-target="main" href="/portfolio" data-reload) Portfolio
       .tab-pane-group
-        #main.tab-pane
-        //- block content
+        #main.tab-pane.active(href=href)
+          block content
     block footer

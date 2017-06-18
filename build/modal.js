@@ -118,9 +118,10 @@ var methods = {
 
       // if an href was provided, load the HTML from the server with the modal header,
       //   put the HTML in the modal, then run any scripts necessary
-      Ajax.html({method:"GET", url:url, headers: {modal:true}})
-      .then(html => {
-        return Modal.methods.createModal(html, target)
+      Ajax.fetch({method:"GET", url:url, headers: {modal:true}})
+      .then(xhr => {
+        target.dispatchEvent(new CustomEvent('loaded',{detail: xhr, bubbles:true, cancelable:true}))
+        return Modal.methods.createModal(xhr.responseText, target)
       })
       .catch(err => {
         return Modal.methods.createModal(err, target)
@@ -131,17 +132,14 @@ var methods = {
   },
 
   loadModal: function(url,callback) {
-    Ajax.html({
-      method:"GET",
+    Ajax.fetch({
+      method: "GET",
       url:url,
       headers: {modal:true}
     })
-    .then(text => {
-      Modal.dom.innerHTML = text
-      var scripts = Modal.dom.querySelectorAll('script')
-      for(var n=0; n<scripts.length; n++) {
-        eval(scripts[n].innerHTML)
-      }
+    .then(xhr => {
+      Modal.dom.innerHTML = xhr.responseText
+      Modal.dom.dispatchEvent(new CustomEvent('loaded',{detail: xhr, bubbles:true, cancelable:true}))
       // Modal.dom.appendChild.call(newdiv.childNodes[0]);
 
       return callback();
@@ -163,9 +161,9 @@ var methods = {
     Array.prototype.slice.call(target.querySelectorAll('.modal-title')).map(title =>{title.classList.add('handle')})
     modals[target.id] = new Modal(target);
 
-    if(!target.querySelector('button.close')) {
+    if(!target.querySelector('button.close.close-modal')) {
       let close = document.createElement('button');
-      close.classList.add('as-link','close', 'lg', 'float');
+      close.classList.add('as-link','close', 'lg', 'float', 'close-modal');
       close.dataset.click = 'remove';
       close.dataset.target = '.modal';
       target.insertBefore(close, target.firstChild)

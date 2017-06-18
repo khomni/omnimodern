@@ -1,12 +1,12 @@
-// window.addEventListener('popstate', e => {
-//   let triggerTab = document.querySelector('.tab[href="'+e.state.href+'"]')
-//   if(!triggerTab) return true;
-
-//   triggerTab.dispatchEvent(new Event('show.tab', {bubbles:true, cancelable:true}))
-//   e.preventDefault();
-//   return false;
-// });
-
+window.addEventListener('popstate', e => {
+  if(!e.state.href) return true;
+  let main = document.getElementById('main');
+  let triggerTab = document.querySelector('[href="'+e.state.href+'"]')
+  main.dispatchEvent(new CustomEvent('load.pane', {detail: {href:e.state.href}, bubbles:true, cancelable:true}))
+  if(triggerTab) triggerTab.dispatchEvent(new Event('shown.tab',{bubbles:true, cancelable:true}))
+  e.preventDefault();
+  return false;
+});
 
 document.addEventListener('show.tab', function(e) {
   let source = e.target;
@@ -16,14 +16,8 @@ document.addEventListener('show.tab', function(e) {
 
   var href = source.getAttribute('href');
 
-  var allTabs = Array.prototype.slice.call(source.parentNode.childNodes)
 
   target.addEventListener('shown.pane', function tabShown(e) {
-    
-    allTabs.forEach(node => {
-      if(node != source) return node.classList.remove('active');
-      return node.classList.add('active');
-    })
 
     source.dispatchEvent(new Event('shown.tab', {bubbles:true, cancelable:true}))
     target.removeEventListener('shown.tab', tabShown)
@@ -34,8 +28,9 @@ document.addEventListener('show.tab', function(e) {
     return target.dispatchEvent(new Event('show.pane', {bubbles:true, cancelable:true}))
   }
   
-  target.setAttribute('href', href);
-  target.dispatchEvent(new Event('load.pane', {bubbles:true, cancelable:true}))
+  // state is pushed here instead of the load so the panel can be loaded and reloaded without adding additional history states
+  history.pushState({href: href}, null, href)
+  target.dispatchEvent(new CustomEvent('load.pane', {detail: {href: href}, bubbles:true, cancelable:true}))
 
   if(!target.setReload) {
     target.setReload = true;
@@ -44,11 +39,11 @@ document.addEventListener('show.tab', function(e) {
     });
   }
 
-  target.addEventListener('loaded.pane', function tabLoaded(e){
+  target.addEventListener('loaded', function tabLoaded(e){
     // exampine the tab's XHR response
     let xhr = e.detail;
     // remove this listener after it fires
-    target.removeEventListener('loaded.pane', tabLoaded)
+    target.removeEventListener('loaded', tabLoaded)
     
     source.classList.remove('error','obscured');
     if(xhr.status >= 500 && xhr.status < 600) return source.classList.add('error');
@@ -60,22 +55,33 @@ document.addEventListener('show.tab', function(e) {
     // target.classList.add('active');
 });
 
+document.addEventListener('shown.tab', function(e){
+  let source = e.target
+  var allTabs = Array.prototype.slice.call(source.parentNode.childNodes)
+
+  allTabs.forEach(node => {
+    if(node != source) return node.classList.remove('active');
+  })
+
+  return source.classList.add('active');
+})  
+
 document.addEventListener('load.pane', function(e){
   let thisPane = e.target;
-  let href = thisPane.getAttribute('href');
+  let href = (e.detail&&e.detail.href) || thisPane.getAttribute('href');
   if(!href) return false;
+  main.setAttribute('href', href);
 
   Ajax.fetch({url:href, method:'get', headers:{'Accept': 'text/html', 'X-Tab-Content': true}})
   .then(xhr => {
     // send the xhr resonse to the tab
-    thisPane.dispatchEvent(new CustomEvent('loaded.pane', {detail: xhr, bubbles:true, cancelable:true}));
-
     let html = xhr.responseText
 
     if(xhr.getResponseHeader('X-Modal')) return Modal.methods.createModal(html);
 
     thisPane.classList.remove('error');
     thisPane.innerHTML = html;
+    thisPane.dispatchEvent(new CustomEvent('loaded', {detail: xhr, bubbles:true, cancelable:true}));
   })
   .catch(err => {
     thisPane.classList.add('error')

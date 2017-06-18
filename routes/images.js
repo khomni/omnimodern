@@ -51,11 +51,12 @@ let imageRouter = express.Router({mergeParams: true})
 router.use('/:id', (req,res,next) => {
   if(!res.locals.imageable) return next(Common.error.notfound('Could not locate the imageable resource'));
 
-  return res.locals.imageable.getImages({
-    where: {id: req.params.id}
-  })
+  return res.locals.imageable.getImages({ where: {id: req.params.id} })
   .then(image => {
-    res.locals.image = image[0]
+    image = image[0]
+    res.locals.image = image
+    res.locals.headerImage = image.path
+    res.set('X-Header-Image', image.path)
     return next();
   })
   .catch(next)

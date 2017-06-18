@@ -1,0 +1,54 @@
+if !currentUser && project.Images
+  .flex.horz.pad.center
+    each image in project.Images
+      a(href='/portfolio/' + project.url + '/images/' + image.id data-click="modal")
+        img.preview-photo(src=image.path)
+else
+  .flex.vert.drop-area
+    .flex.center.pad
+      if project.Images
+        each image in project.Images
+          .flex.vert.border(data-kind="Image" data-ref=image.id)
+            a(href=action + '/images/' + image.id data-click="modal" data-target="image-"+image.id draggable="false")
+              img(src=image.path draggable="false").photo-upload
+            .flex.pad.distribute
+              a.close(href=action + '/images/' + image.id + '/edit' data-response="modal"): i.fa.fa-wrench
+              form(action=action +  '/images/' + image.id method="delete" data-response="json" data-reaction="remove")
+                button.close(title="Delete Photo"): i.fa.fa-trash
+    form(action="/portfolio/" + project.url + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
+      label.btn
+        span Select Files
+        input(type="file" name="files" accept="image/*" multiple)
+      button.btn Upload
+
+.content
+  .project-subsection
+    .flex.grow.vert
+      .flex.horz
+        a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")= project.title
+        .flex.grow.je.center
+          label.timestamp(data-time=project.updatedAt.getTime())
+      .flex.horz
+        .project-subsection.flex.vert.grow
+          .project-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
+          .project-detail= project.status
+  .project-subsection
+    if project.description
+      != markdown(project.description)
+
+.content
+  if project.BlogPosts.length > 0
+    .project-subsection
+      h3 Recent Blog Posts
+      each post in project.BlogPosts
+        include ../blog/_preview
+      a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
+    
+
+
+  if currentUser
+    .project-subsection
+      form.flex.center.pad
+        a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new") Add Blog
+        a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit") Edit Project
+        button.btn(formaction="/portfolio/" + project.url formmethod="delete") Delete Project

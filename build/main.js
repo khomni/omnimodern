@@ -15,12 +15,9 @@ document.onreadystatechange = function(){
   pageInitialized = true;
 
   require('./polyfill');
-
-  require('./dataemissions');
   require('./keypress');
 
   // add document-level event listeners for the application
-  require('./listeners');
 
   Drag.init();
   Navbar.init();
@@ -29,5 +26,8 @@ document.onreadystatechange = function(){
   Ajax.setListeners();
   window.Ajax = Ajax
   window.Modal = Modal
+
+  require('./listeners');
+  require('./dataemissions');
 
 }

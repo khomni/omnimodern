@@ -1,3 +1,15 @@
+include /mixins/mixins
+
+.tab-group
+  a.tab(href="/portfolio"  data-click="tab" data-target="main" class=!category&&'active'||'') All
+  each value,cat in aggregation||[]
+    a.tab(href="/portfolio?category=" + cat data-click="tab" data-target="main" class=category==cat&&'active'||'')= cat
+if category
+  +pagination({baseUrl: '/portfolio?category='+ category, page:page, totalpages:pages})
+else
+  +pagination({baseUrl: '/portfolio', page:page, totalpages:pages})
+
+
 .content
   if projects
     each project in projects

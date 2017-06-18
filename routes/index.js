@@ -13,14 +13,23 @@ router.get('/', (req, res, next) => {
   return res.render('index');
 });
 
+router.use('/', (req,res,next) => {
+  if(req.isTab || req.json || req.modal) return next();
+
+  return res.render('index', {href: req.url})
+
+})
+
 router.route('/login')
 .get((req,res,next) => {
-  if(req.user) return next(Common.error.request('Already Logged In'))
+  if(req.user) return next(Common.error.request('Already Logged In'));
 
   return db.User.count()
   .then(n => {
     if(!n) return res.set('X-Modal', true).render('users/_signup');
-    return res.set('X-Modal', true).render('users/_login');
+
+    if(req.modal) return res.set('X-Modal', true).render('users/_login');
+    return res.render('users/login')
   })
   .catch(next)
 

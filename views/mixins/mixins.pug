@@ -1,43 +1,18 @@
 include ./filters
 include ./comments
 
-mixin delete(object, options)
-  -options = options || {}
-  -var action = (options.action||object.url)
-  form(id=id, action=action method="delete" data-response="json")&attributes(attributes)
-    button.btn
-      block
+mixin pagination(pageObject)
+  - var symbol = /\?/.test(pageObject.baseUrl) ? "&" : "?"
+  .tab-group
+    case pageObject.page
+      when 1
+        a.tab(href=pageObject.baseUrl data-click="tab" data-target="main" disabled=(pageObject.page<=1)) Back
+      default
+        a.tab(href=pageObject.baseUrl + symbol + "page=" + (pageObject.page-1) data-click="tab" data-target="main" disabled=(pageObject.page<=1)) Back
 
-mixin logo(options)
-  -options = options || {}
-  -options.inline = options.inline || true
-  -options.text = options.text || false
-  -options.cube = options.cube || true
-  if options.inline
-    .logo.inline&attributes(attributes)
-      if options.text
-        img.text(src="/images/logo-text.svg")
-      if options.cube
-        img.cube(src="/images/logo-d6.svg")
-  else
-    .logo&attributes(attributes)
-      if options.text
-        img.text(src="/images/logo-text.svg")
-      if options.cube
-        img.cube(src="/images/logo-d6.svg")
+    - let i = 1;
+    while i <= pageObject.totalpages
+      a.tab(href=pageObject.baseUrl + symbol + "page=" + i disabled=(i==pageObject.page))= i
+      - i++
 
-mixin section(title)
-  section
-    if title
-      .section-title
-        h2= title
-    .section-body
-      block
-    
-mixin header(options)
-  header#header&attributes(attributes)
-    .header-content
-      block
-      if breadcrumbs && breadcrumbs.length > 0
-        .header-item
-          include /components/breadcrumbs
+    a.tab(href=pageObject.baseUrl + symbol + "page=" + (pageObject.page+1) data-click="tab" data-target="main" disabled=(pageObject.page >= pageObject.totalpages)) Next

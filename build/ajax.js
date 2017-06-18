@@ -113,7 +113,12 @@ Ajax.setListeners = function() {
       body:thisForm
     })
     .then(xhr => {
-      if(xhr.getResponseHeader('X-Redirect')) return window.location = xhr.getResponseHeader('X-Redirect');
+      let redirect = xhr.getResponseHeader('X-Redirect')
+      if(redirect) {
+        history.pushState({href: redirect},null,redirect);
+        return document.getElementById('main').dispatchEvent(new CustomEvent('load.pane', {detail:{href:redirect}, bubbles:true, cancelable:true}))
+        // load the redirect content to main
+      }
 
       // if the router responds with JSON data, emit it from the form as a 'data' event
       var contentType = xhr.getResponseHeader('Content-Type') || []

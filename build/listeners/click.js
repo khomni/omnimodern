@@ -3,10 +3,11 @@ var dom = require('./dom.js');
 
 (function(){
   document.addEventListener('click', e => {
-    var clickAction = e.target.dataset.click
-    if(!clickAction) return true;
 
     var source = e.target
+    if(!('click' in source.dataset)) source = source.closest('[data-click]')
+    var clickAction = source.dataset.click
+    if(!clickAction) return true;
     e.preventDefault();
 
     // duplicate an element or template in the dom and append it to the 'destination'
@@ -24,6 +25,8 @@ var dom = require('./dom.js');
       return dom.toggle(source, 'collapsed')
     }
 
+
+    console.log(source)
     if(clickAction == 'tab' && source.dataset.target) {
       // let href = source.getAttribute('href')
       // if(href) history.pushState({href: href}, null, href)

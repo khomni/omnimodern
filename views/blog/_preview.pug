@@ -1,0 +1,8 @@
+.blogpost-preview            
+  .blogpost-preview-title.flex.horz
+    a(href=action + "/blog/" + post.slug data-click="tab" data-target="main")= post.title
+    .flex.grow.je.center
+      label.timestamp(data-time=post.updatedAt.getTime())
+  if post.body_preview
+    .blogpost-preview-body
+      != markdown(post.body_preview)

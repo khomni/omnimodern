@@ -1,0 +1,8 @@
+section
+  form(name='login' action='/login' method='post')
+    .flex.pad
+      input.form-input(name='username' placeholder="Username" required)
+    .flex.pad
+      input.form-input(type='password' required name='password' placeholder="password" value="")
+    .flex.pad.center
+      button.btn(type='submit') Log In

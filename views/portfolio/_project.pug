@@ -1,32 +1,40 @@
 if !project.archived || currentUser && currentUser.admin
-  .project(class=project.archived&&'obscured'||'')
-    h2= project.title
-    label(data-time=project.updatedAt.getTime())
-    label= project.status
-    p.copy= project.description
-    pre= JSON.stringify(project, null, '  ')
-    if project.BlogPosts.length > 0
-      a(href="/portfolio/" + project.url + "/blog") See All Blog Posts
+  section.project(id="project-" + project.id, class=project.archived&&'obscured'||'').flex.horz.row.as.js
+    if project.Images && project.Images.length > 0
+      .project-image.flex.vert
+        a(href="/portfolio/" + project.url data-click="tab" data-target="main")
+          img.preview-photo(src=project.Images[0].path)
+        if project.Images.length > 1
+          .flex.center: label.project-detail #{project.Images.length} Images
+    .flex.vert.grow
+      .project-subsection
+        .flex.horz
+          a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")= project.title
+          .flex.grow.je.center
+            label.timestamp(data-time=project.updatedAt.getTime())
+      .project-subsection
+        .flex.horz
+          .project-subsection.flex.vert.grow
+            .project-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
+            .project-detail= project.status
+      .project-subsection
+        if project.description
+          != markdown(project.description)
+        //- pre= JSON.stringify(project, null, '  ')
 
-    
-    if currentUser
-      .flex.vert.drop-area
-        .flex.center.pad
-          each image in project.Images
-            .flex.vert.border(data-kind="Image" data-ref=image.id)
-              a(href='/images/' + image.id data-click="modal" data-target="image-"+image.id draggable="false")
-                img(src=image.path draggable="false").photo-upload
-              .flex.pad.distribute
-                a.close(href="/portfolio/" + project.url + '/images/' + image.id + '/edit' data-response="modal"): i.fa.fa-wrench
-                form(action="/portfolio/" + project.url + '/images/' + image.id method="delete" data-response="json" data-reaction="remove")
-                  button.close(title="Delete Photo"): i.fa.fa-trash
-        form(action="/portfolio/" + project.url + '/images' method="POST" enctype="multipart/form-data" data-response="json" data-reaction="redirect").flex.center.pad.grow.drop-target
-          label.btn
-            span Select Files
-            input(type="file" name="files" accept="image/*" multiple)
-          button.btn Upload
+      if project.BlogPosts.length > 0
+        .project-subsection
+          .flex.grow.vert
+            h3 Recent Blog Posts
+            ul
+              each post in project.BlogPosts
+                li #[a(href=action + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
+            a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
 
-      form.flex.center.pad
-        a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new") Add Blog
-        a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit") Edit Project
-        button.btn(formaction="/portfolio/" + project.url formmethod="delete") Delete Project
+        if currentUser
+          .project-subsection
+            .flex.grow.vert: .flex.horz
+              form.flex.center.pad
+                a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new") Add Blog
+                a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit") Edit Project
+                button.btn(formaction="/portfolio/" + project.url formmethod="delete") Delete Project
