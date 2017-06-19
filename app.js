@@ -21,21 +21,6 @@ var app = express();
 var browserify = require('browserify-middleware');
 app.use('/javascripts', browserify('./build'));
 
-/*
-if(app.get('env') != 'production') {
-  var fs = require("fs");
-  var browserify = require("browserify");
-  var babelify = require("babelify");
-
-  browserify({ debug: true })
-    .transform("babelify",  {presets: ["es2015", "react"]})
-    .require("src/index.jsx", { entry: true })
-    .bundle()
-    .on("error", function (err) { console.log("Error: " + err); })
-    .pipe(fs.createWriteStream("public/javascripts/bundle.js"));
-}
-*/
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

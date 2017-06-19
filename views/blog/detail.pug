@@ -1,0 +1,59 @@
+if !currentUser && post.Images
+  .flex.horz.pad.center
+    each image in post.Images
+      a(href=action + '/images/' + image.id data-click="modal")
+        img.preview-photo(src=image.path)
+else
+  .flex.vert.drop-area
+    .flex.center.pad
+      if post.Images
+        each image in post.Images
+          .flex.vert.border(data-kind="Image" data-ref=image.id)
+            a(href=action + '/images/' + image.id data-click="modal" data-target="image-"+image.id draggable="false")
+              img(src=image.path draggable="false").photo-upload
+            .flex.pad.distribute
+              a.close(href=action + '/images/' + image.id + '/edit' data-response="modal"): i.fa.fa-wrench
+              form(action=action +  '/images/' + image.id method="delete" data-response="json" data-reaction="remove")
+                button.close(title="Delete Photo"): i.fa.fa-trash
+    form(action=action + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
+      label.btn
+        span Select Files
+        input(type="file" name="files" accept="image/*" multiple)
+      button.btn Upload
+
+.content
+  if !post.archived || currentUser && currentUser.admin
+    section.project(class=post.archived&&'obscured'||'').flex.horz.row.as.js
+      if post.Images && post.Images.length > 0
+          .project-image.flex.vert
+            a(href=action + '/' + post.slug + '/images/' + post.Images[0].id data-click="modal")
+              img.preview-photo(src=post.Images[0].path)
+            if post.Images.length > 1
+              .flex.center: label.project-detail #{project.Images.length} Images
+      .flex.vert.grow
+        .project-subsection
+          .flex.horz
+            a.project-title(href="/blog/" + post.slug data-click="tab" data-target="main")= post.title
+            .flex.grow.je.center
+              label.timestamp(data-time=post.updatedAt.getTime())
+          .project-subsection
+            .flex.horz
+              .flex.vert
+                .project-detail by #{post.User.name}
+                if post.Project
+                  .project-detail for #[a(href="/portfolio/" + post.Project.url data-click="tab" data-target="main")= post.Project.title]
+                  .project-detail in #[a(href="/portfolio?category=" + post.Project.category data-click="tab" data-target="main")= post.Project.category]
+        .project-subsection.markdown(class=post.truncated&&'truncated'||'')
+          if post.body
+            != markdown(post.body_preview)
+        if post.truncated
+          a(href=action + '/' + post.slug) See More
+
+        //- pre= JSON.stringify(post,null,'  ')
+      
+        if currentUser
+          .project-subsection
+              .flex.grow.vert: .flex.horz
+                form(action='/blog/' + post.slug).flex.center.pad
+                  a.btn(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit') Edit Post
+                  button.btn(formmethod="delete") Delete Post

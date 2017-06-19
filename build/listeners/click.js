@@ -3,9 +3,9 @@ var dom = require('./dom.js');
 
 (function(){
   document.addEventListener('click', e => {
-
     var source = e.target
     if(!('click' in source.dataset)) source = source.closest('[data-click]')
+    if(!source) return true;
     var clickAction = source.dataset.click
     if(!clickAction) return true;
     e.preventDefault();
@@ -25,8 +25,6 @@ var dom = require('./dom.js');
       return dom.toggle(source, 'collapsed')
     }
 
-
-    console.log(source)
     if(clickAction == 'tab' && source.dataset.target) {
       // let href = source.getAttribute('href')
       // if(href) history.pushState({href: href}, null, href)

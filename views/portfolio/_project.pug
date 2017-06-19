@@ -28,7 +28,7 @@ if !project.archived || currentUser && currentUser.admin
             h3 Recent Blog Posts
             ul
               each post in project.BlogPosts
-                li #[a(href=action + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
+                li #[a(href="/portfolio/" + project.url + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
             a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
 
       if currentUser

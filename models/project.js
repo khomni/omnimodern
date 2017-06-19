@@ -73,6 +73,7 @@ module.exports = function(sequelize, DataTypes) {
           include: [{
             model: models.BlogPost, 
             required: false,
+            where: {archived:false},
             order: [['createdAt','DESC']], 
             limit: 5
           }]

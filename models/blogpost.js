@@ -53,9 +53,20 @@ module.exports = function(sequelize, DataTypes) {
 
         BlogPost.addScope('defaultScope', {
           order: [['createdAt','DESC']],
-          where: {archived: false},
-          include: [{model:models.User},{model:models.Image}]
+          include: [{model:models.User}, {model:models.Image, limit:1}]
         }, {override: true})
+
+        BlogPost.addScope('images', {
+          include: [{model:models.Image}]
+        })
+
+        BlogPost.addScope('project', {
+          include: [{model:models.Project}]
+        })
+
+        BlogPost.addScope('user', {
+          include: [{model:models.User}]
+        })
 
       }
     }

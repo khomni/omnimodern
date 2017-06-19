@@ -82,6 +82,7 @@ router.use('/:url', (req,res,next) => {
     {model:db.BlogPost, limit: 3}
     ]})
   .then(project => {
+    if(!project) return Common.error.notfound('Project not found');
     res.locals.project = project
 
     if(project.Images && project.Images.length > 0) {

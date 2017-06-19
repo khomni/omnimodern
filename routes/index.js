@@ -10,14 +10,12 @@ var LocalStrategy = require('passport-local').Strategy;
 /* GET home page. */
 router.get('/', (req, res, next) => {
   if(req.isTab) return res.render('home');
-  return res.render('index');
+  return res.render('index',{href:'/'});
 });
 
 router.use('/', (req,res,next) => {
   if(req.isTab || req.json || req.modal) return next();
-
   return res.render('index', {href: req.url})
-
 })
 
 router.route('/login')

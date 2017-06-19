@@ -49,19 +49,27 @@ var blogRouter = express.Router({mergeParams:true});
 
 router.use('/:slug', (req,res,next) => {
 
-
-  return db.BlogPost.find({where: {slug: req.params.slug}, include: [{model: db.Project}]})
+  return db.BlogPost.scope(['images','project','user']).find({where: {slug: req.params.slug}})
   .then(blogpost => {
     if(!blogpost) return Common.error.notfound('Blog post not found')
     res.locals.post = blogpost
     res.locals.action = req.baseUrl
+
+    if(blogpost.Images && blogpost.Images.length > 0) {
+      let randomImage = blogpost.Images[Math.floor(Math.random()*blogpost.Images.length)].path
+      res.locals.action = req.baseUrl
+      res.locals.headerImage = randomImage
+      res.set('X-Header-Image', randomImage)
+    }
+
     return next();
   })
   .catch(next)
 }, blogRouter)
 
 blogRouter.get('/', (req,res,next)=>{
-  return res.json(res.locals.post)
+  if(req.json) return res.json(res.locals.post)
+  return res.render('blog/detail')
 })
 
 blogRouter.get('/edit', (req,res,next) => {
