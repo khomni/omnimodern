@@ -1,6 +1,5 @@
 'use strict';
 
-const Promise = require('Promise');
 const dom = require('./dom.js');
 const Ajax = require('../ajax');
 const Modal = require('../modal');

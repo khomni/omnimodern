@@ -6,7 +6,6 @@ module.exports = {
     forcesync: false,
     options: {
       dialect: "postgres",
-      host: "localhost",
       uri: process.env.DATABASE_URL,
       logging: false,
       dialectOptions: {
