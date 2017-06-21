@@ -25,7 +25,8 @@ else
   .project-subsection
     .flex.grow.vert
       .flex.horz
-        a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")= project.title
+        a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")
+          h1= project.title
         .flex.grow.je.center
           label.timestamp(data-time=project.updatedAt.getTime())
       .flex.horz

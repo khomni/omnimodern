@@ -114,9 +114,9 @@ a:not(.no-link):not(.btn):not(.tab),.as-link {
   }
 
   &:focus,&:hover {
-    color: @color-primary;
-    outline:none;
-    text-decoration:underline;
+    color: lighten(@color-primary,15%);
+    outline: none;
+    text-shadow: 0px 0px 8px fade(@color-primary, 50%);
   }
 }
 
@@ -290,7 +290,7 @@ header {
 
 h1,h2,h3,h4,h5,h6 {
   font-weight: 400;
-  margin: 0;
+  margin: 1em 0;
 }
 
 p {

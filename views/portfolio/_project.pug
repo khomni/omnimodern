@@ -9,7 +9,8 @@ if !project.archived || currentUser && currentUser.admin
     .flex.vert.grow
       .project-subsection
         .flex.horz
-          a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")= project.title
+          a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")
+            h2= project.title
           .flex.grow.je.center
             label.timestamp(data-time=project.updatedAt.getTime())
       .project-subsection
