@@ -7,6 +7,8 @@ module.exports = {
     options: {
       dialect: "postgres",
       host: process.env.DATABASE_URL || "localhost",
+      ssl: true,
+      native: true,
       logging: false
     }
   },
