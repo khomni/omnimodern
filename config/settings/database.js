@@ -6,10 +6,11 @@ module.exports = {
     forcesync: false,
     options: {
       dialect: "postgres",
-      host: process.env.DATABASE_URL || "localhost",
+      host: "localhost",
+      uri: process.env.DATABASE_URL,
       logging: false,
       dialectOptions: {
-        ssl: true
+        ssl: process.env.PGSSLMODE=='true'
       },
     }
   },
@@ -20,7 +21,7 @@ module.exports = {
     forcesync: true,
     options: {
       dialect: "postgres",
-      host: "127.0.0.1",
+      host: "localhost",
       logging: false,
     }
   },
@@ -31,7 +32,7 @@ module.exports = {
     forcesync: false,
     options: {
       dialect: "postgres",
-      host: "127.0.0.1",
+      host: "localhost",
       logging: false
         // console.log(colors.grey.apply(null, Array.prototype.slice.call(arguments).join('').match(/\b[A-Z]+\b/g)))
         // console.log(colors.grey.apply(null, Array.prototype.slice.call(arguments)))

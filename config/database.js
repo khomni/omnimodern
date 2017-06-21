@@ -3,7 +3,11 @@
 const Sequelize = require('sequelize');
 require('sequelize-hierarchy')(Sequelize);
 
-var sequelize = new Sequelize(CONFIG.database.name, CONFIG.database.username, CONFIG.database.password, CONFIG.database.options)
+if(CONFIG.database.uri) {
+  var sequelize = new Sequelize(CONFIG.database.uri, CONFIG.database.options)
+} else {
+  var sequelize = new Sequelize(CONFIG.database.name, CONFIG.database.username, CONFIG.database.password, CONFIG.database.options)
+}
 
 sequelize.authenticate()
 
