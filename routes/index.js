@@ -18,7 +18,7 @@ router.use('/', (req,res,next) => {
   return res.render('index', {href: req.url})
 })
 
-router.route('/login')
+router.route('/admin')
 .get((req,res,next) => {
   if(req.user) return next(Common.error.request('Already Logged In'));
 

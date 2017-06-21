@@ -33,21 +33,19 @@ else
       .flex.vert.grow
         .project-subsection
           .flex.horz
-            a.project-title(href="/blog/" + post.slug data-click="tab" data-target="main")= post.title
+            a.project-title(href='/blog/' + post.slug data-click="tab" data-target="main")= post.title
             .flex.grow.je.center
               label.timestamp(data-time=post.updatedAt.getTime())
-          .project-subsection
-            .flex.horz
-              .flex.vert
-                .project-detail by #{post.User.name}
-                if post.Project
-                  .project-detail for #[a(href="/portfolio/" + post.Project.url data-click="tab" data-target="main")= post.Project.title]
-                  .project-detail in #[a(href="/portfolio?category=" + post.Project.category data-click="tab" data-target="main")= post.Project.category]
-        .project-subsection.markdown(class=post.truncated&&'truncated'||'')
+        .project-subsection
+          .flex.horz
+            .flex.vert
+              .project-detail by #{post.User.name}
+              if post.Project
+                .project-detail for #[a(href='/portfolio/' + post.Project.url data-click="tab" data-target="main")= post.Project.title]
+                .project-detail in #[a(href='/portfolio?category=' + post.Project.category data-click="tab" data-target="main")= post.Project.category]
+        .project-subsection.markdown
           if post.body
-            != markdown(post.body_preview)
-        if post.truncated
-          a(href=action + '/' + post.slug) See More
+            != markdown(post.body)
 
         //- pre= JSON.stringify(post,null,'  ')
       

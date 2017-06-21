@@ -14,7 +14,7 @@ if !project.archived || currentUser && currentUser.admin
             label.timestamp(data-time=project.updatedAt.getTime())
       .project-subsection
         .flex.horz
-          .project-subsection.flex.vert.grow
+          .flex.vert.grow
             .project-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
             .project-detail= project.status
       .project-subsection

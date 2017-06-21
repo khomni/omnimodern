@@ -15,8 +15,8 @@ block main
     block header
       header#header
         if headerImage
-          img.header-image(src=headerImage)
-        .header-text OmniGoat
+          img.header-image(src=headerImage draggable="false")
+        //- .header-text OmniGoat
     #content-main&attributes({class: THEME})
       .tab-group
         block navigation

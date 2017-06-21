@@ -39,6 +39,8 @@ document.addEventListener('replaceImage', function(e){
 
   let newImage = new Image()
   newImage.src = src
+  newImage.classList.add('header-image');
+  newImage.setAttribute('draggable', false);
 
   newImage.onload = function(){
     let otherImages = Array.prototype.slice.call(container.querySelectorAll('img'))

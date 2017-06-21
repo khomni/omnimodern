@@ -14,7 +14,7 @@ router.get('/', Common.middleware.querify, (req, res, next) => {
   res.locals.action = req.baseUrl
   if(res.locals.project) query.ProjectId = res.locals.project.id
 
-  return db.BlogPost.findAndCountAll({where:query, order: [['createdAt','DESC']], limit: limit, offset: offset, include: [{model: db.Project}] })
+  return db.BlogPost.scope(['project', 'user']).findAndCountAll({where:query, limit: limit, offset: offset })
   .then(blogposts => {
     res.locals.blogposts = blogposts.rows
     res.locals.total = blogposts.count
@@ -51,7 +51,7 @@ router.use('/:slug', (req,res,next) => {
 
   return db.BlogPost.scope(['images','project','user']).find({where: {slug: req.params.slug}})
   .then(blogpost => {
-    if(!blogpost) return Common.error.notfound('Blog post not found')
+    if(!blogpost) throw Common.error.notfound('Blog post not found')
     res.locals.post = blogpost
     res.locals.action = req.baseUrl
 
