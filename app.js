@@ -6,7 +6,6 @@ require('./config/globals');
 var express = require('express');
 
 const favicon = require('serve-favicon');
-const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -55,10 +54,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // pipes images from Amazon AWS s3 service to the result
 app.use('/i', require('./middleware/images'))
 
-app.use(logger('dev'));
+app.use(require('./config/logs'));
 // set up the vignettes for the header and homepage
 
-app.use(function(req,res,next){
+app.use((req,res,next) => {
   res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   res.header('Expires', '-1');
   res.header('Pragma', 'no-cache');

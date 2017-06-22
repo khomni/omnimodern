@@ -24,12 +24,6 @@ else
 .content
   if !post.archived || currentUser && currentUser.admin
     section.project(class=post.archived&&'obscured'||'').flex.horz.row.as.js
-      if post.Images && post.Images.length > 0
-        .project-image.flex.vert
-          a(href=action + '/' + post.slug + '/images/' + post.Images[0].id data-click="modal")
-            img.preview-photo(src=post.Images[0].path)
-          if post.Images.length > 1
-            .flex.center: label.project-detail #{project.Images.length} Images
       .flex.vert.grow
         .project-subsection
           .flex.horz

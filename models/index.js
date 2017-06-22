@@ -10,15 +10,6 @@ const EventEmitter = require('events')
 
 let db = {};
 
-fs.readdirSync(__dirname)
-.filter(function(file) {
-  return (file.indexOf('.') !== 0) && (file !== basename) && ((file.slice(-3) === '.js') || (file.indexOf('.') < 0));
-})
-.forEach(function(file) {
-  let model = sequelize.import(path.join(__dirname, file));
-  db[model.name] = model
-});
-
 db._connection = new EventEmitter();
 
 db._associate = function(){
@@ -30,7 +21,7 @@ db._associate = function(){
 }
 
 // associates the models and syncs to the database
-db._sync = Promise.method(function(){
+db._sync = Promise.method(() => {
   db._associate();
 
   return Promise.try(()=>{
@@ -45,13 +36,6 @@ db._sync = Promise.method(function(){
   .then(syncResults => {
     // individually check to make sure the model associations are valid
     return syncResults;
-    // Promise.map(Object.keys(syncResults.models), key => {
-    //   return syncResults.models[key].findOne({where:{}})
-    //   .catch(err => {
-    //     console.log('force resync:',key)
-    //     return syncResults.models[key].sync({force: true})
-    //   })
-    // })
   })
 })
 
@@ -63,19 +47,28 @@ db._methods = function(doc,regex) {
   return methods
 }
 
-db._sync()
-.then(models => {
-
-  if(CONFIG.database.options.uri) console.log(colors.magenta('[' + CONFIG.database.options.uri + '] connected'))
-  else console.log(colors.magenta('['+(CONFIG.database.options.host||'') + '/' + (CONFIG.database.name||'') + '] connected'))
+sequelize.authenticate()
+.then(() => {
   
-  db._connection.synced = true
-  db._connection.emit('synced')
+  fs.readdirSync(__dirname)
+  .filter(function(file) {
+    return (file.indexOf('.') !== 0) && (file !== basename) && ((file.slice(-3) === '.js') || (file.indexOf('.') < 0));
+  })
+  .forEach(function(file) {
+    let model = sequelize.import(path.join(__dirname, file));
+    db[model.name] = model
+  });
+
+  db._sync()
+  .then(models => {
+    db._connection.synced = true
+    db._connection.emit('synced')
+  })
+
 })
-.catch(err => {
-  console.error('sync error:', err.stack)
-  db._connection.emit('error', err)
-})
+.catch(err => db._connection.emit('error', err) )
+
+
 
 module.exports = db
 
