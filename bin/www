@@ -25,7 +25,7 @@ if(cluster.isMaster) {
       connectedWorkers++;
       if(process.stdout.isTTY) process.stdout.write(colors[COLORS[worker.id % 8]]('■'))
       if(connectedWorkers >= CONFIG.process.threads) {
-        process.stdout.cursorTo(0)
+        if(process.stdout.isTTY) process.stdout.cursorTo(0)
         console.log(colors.gray(`${connectedWorkers} workers listening`))
       }
     });
