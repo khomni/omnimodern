@@ -68,8 +68,6 @@ sequelize.authenticate()
 })
 .catch(err => db._connection.emit('error', err) )
 
-
-
 module.exports = db
 
 module.exports.sequelize = sequelize;

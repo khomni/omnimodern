@@ -24,6 +24,7 @@ passport.use(new LocalStrategy({usernameField: 'username', passwordField: 'passw
     .then(user => {
       if(!user) return done(null)
       let passwd = user ? user.password : ''
+      console.log(password, passwd, user)
       return db.User.validPassword(password, passwd, user)
       .then(isValid => done(null, isValid) )
     })

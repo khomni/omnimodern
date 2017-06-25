@@ -1,9 +1,9 @@
 @import '../mixins/mixins.less';
 
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-    background:transparent;
+  width: 8px;
+  height: 8px;
+  background:transparent;
 }
 
 /* Track */
@@ -40,6 +40,7 @@ body {
   background-color: @color-ui;
   color: @color-dark;
   overflow-y: overlay;
+  font-size: 18px;
 
   &:before {
     z-index:1000;
@@ -104,7 +105,7 @@ body {
 
 }
 
-a:not(.no-link):not(.btn):not(.tab),.as-link {
+a:not(.no-link):not(.btn):not(.tab):not(.close),.as-link {
   color: @color-primary;
   transition: 0.5s;
   text-decoration:none;
@@ -325,15 +326,14 @@ section {
   border-radius: 1px;
   position: relative;
   z-index: 2;
-  margin: 0.5rem auto;
+  
+  & + section {
+    margin-top: 2em;
+  }
 
   &.raised {
     border: 1px solid fade(black,50%);
     box-shadow: 0px 1px 2px fade(black,25%);
-  }
-
-  & + .section {
-    margin-top: 1em;
   }
 
   label {
@@ -446,3 +446,38 @@ section {
 .obscured {
   opacity: 0.5;
 }
+
+ol {
+  counter-reset:li; /* Initiate a counter */
+	margin-left:0; /* Remove the default left margin */
+	padding-left:0; /* Remove the default left padding */
+
+  & > li {
+    position:relative; /* Create a positioning context */
+    margin:0 0 6px 2em; /* Give each list item a left margin to make room for the numbers */
+    padding:4px 8px; /* Add some spacing around the content */
+    list-style:none; /* Disable the normal item numbering */
+
+
+    &:before {
+      color: @color-primary;
+      width: 2em;
+      font-size:1em;
+      content: counter(li) "."; /* Use the counter as content */
+      counter-increment:li; /* Increment the counter by 1 */
+      /* Position and style the number */
+      -moz-box-sizing:border-box;
+      -webkit-box-sizing:border-box;
+      box-sizing:border-box;
+      font-weight: 600;
+
+
+      /* Some space between the number and the content in browsers that support
+        generated content but not positioning it (Camino 2 is one example) */
+      margin-right:8px;
+      padding:4px;
+      text-align:center;
+    }
+  }
+}
+

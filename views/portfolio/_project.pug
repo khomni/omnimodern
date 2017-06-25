@@ -1,41 +1,34 @@
 if !project.archived || currentUser && currentUser.admin
-  section.project(id="project-" + project.id, class=project.archived&&'obscured'||'').flex.horz.row.as.js
-    if project.Images && project.Images.length > 0
-      .project-image.flex.vert
-        a(href="/portfolio/" + project.url data-click="tab" data-target="main")
-          img.preview-photo(src=project.Images[0].path)
-        if project.Images.length > 1
-          .flex.center: label.project-detail #{project.Images.length} Images
-    .flex.vert.grow
-      .project-subsection
-        .flex.horz
-          a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")
-            h2= project.title
-          .flex.grow.je.center
-            label.timestamp(data-time=project.updatedAt.getTime())
-      .project-subsection
-        .flex.horz
-          .flex.vert.grow
-            .project-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
-            .project-detail= project.status
-      .project-subsection
-        if project.description
-          != markdown(project.description)
-        //- pre= JSON.stringify(project, null, '  ')
-
+  section.panel(id="project-" + project.id, class=project.archived&&'obscured'||'')
+    .panel-content
+      if project.Images && project.Images.length > 0
+        .preview-image-container
+          a(href="/portfolio/" + project.url data-click="tab" data-target="main")
+            img.preview-image(src=project.Images[0].path)
+          if project.Images.length > 1
+            .preview-image-overlay
+              label.preview-image-overlay.preview-image-label #{project.Images.length} Images
+      .panel-header
+        a.panel-title(href="/portfolio/" + project.url data-click="tab" data-target="main")
+          h2= project.title
+        label.timestamp(data-time=project.updatedAt.getTime())
+      .panel-details
+        .panel-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
+        .panel-detail= project.status
+      hr
+      .panel-body
+        .markdown: != markdown(project.description)
       if project.BlogPosts && project.BlogPosts.length > 0
-        .project-subsection
-          .flex.grow.vert
-            h3 Recent Blog Posts
-            ul
-              each post in project.BlogPosts
-                li #[a(href="/portfolio/" + project.url + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
-            a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
+        .panel-body
+          h3 Recent Blog Posts
+          ul
+            each post in project.BlogPosts
+              li #[a(href="/portfolio/" + project.url + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
+          a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
 
+    form.panel-actions
       if currentUser
-        .project-subsection
-          .flex.grow.vert: .flex.horz
-            form.flex.center.pad
-              a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new") Add Blog
-              a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit") Edit Project
-              button.btn(formaction="/portfolio/" + project.url formmethod="delete") Delete Project
+        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new" title="Add Blog Post"): i.fa.fa-plus
+        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit" title="Edit Project"): i.fa.fa-wrench
+        button.as-link.panel-action(formaction="/portfolio/" + project.url formmethod="delete" title="Delete Project"): i.fa.fa-trash
+        

@@ -30,6 +30,10 @@ module.exports = morgan((tokens, req, res) => {
   else if(responseTime < 500) log.push(colors.yellow(`${responseTime} ms`))
   else log.push(colors.green(`${responseTime} ms`))
 
+  // log.push(colors.gray('–'))
+
+  // log.push(colors.gray(tokens['user-agent'](req,res)))
+
   return log.join(' ');
 
 })

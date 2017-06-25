@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
 var userRouter = express.Router({mergeParams: true});
 
 router.use('/:username',(req,res,next) => {
-  return db.User.findOne({where: {username:req.params.username}, include:[{model: db.Character, as: 'characters'},{model: db.Campaign}]})
+  return db.User.scope('images').findOne({where: {username:req.params.username}})
   .then(user => {
     if(!user) throw Common.error.notfound('User');
     res.locals.user = user
@@ -31,8 +31,5 @@ userRouter.get('/', (req,res,next) => {
   if(req.json) return res.json(res.locals.user)
   return res.render('users/profile',{mainchar:res.locals.user.MainChar, characters:res.locals.user.characters})
 });
-
-userRouter.use('/pc',require('../character'));
-userRouter.use('/c',require('../campaign'));
 
 module.exports = router;

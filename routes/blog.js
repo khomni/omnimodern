@@ -14,7 +14,7 @@ router.get('/', Common.middleware.querify, (req, res, next) => {
   res.locals.action = req.baseUrl
   if(res.locals.project) query.ProjectId = res.locals.project.id
 
-  return db.BlogPost.scope(['project', 'user']).findAndCountAll({where:query, limit: limit, offset: offset })
+  return db.BlogPost.scope(['project', 'user', 'images']).findAndCountAll({where:query, limit: limit, offset: offset })
   .then(blogposts => {
     res.locals.blogposts = blogposts.rows
     res.locals.total = blogposts.count

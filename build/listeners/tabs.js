@@ -29,7 +29,6 @@ document.addEventListener('show.tab', function(e) {
   }
   
   // state is pushed here instead of the load so the panel can be loaded and reloaded without adding additional history states
-  history.pushState({href: href}, null, href)
   target.dispatchEvent(new CustomEvent('load.pane', {detail: {href: href}, bubbles:true, cancelable:true}))
 
   if(!target.setReload) {
@@ -40,11 +39,13 @@ document.addEventListener('show.tab', function(e) {
   }
 
   target.addEventListener('loaded', function tabLoaded(e){
+    history.pushState({href: href}, null, href)
     // exampine the tab's XHR response
     let xhr = e.detail;
     // remove this listener after it fires
     target.removeEventListener('loaded', tabLoaded)
-    
+  
+
     source.classList.remove('error','obscured');
     if(xhr.status >= 500 && xhr.status < 600) return source.classList.add('error');
     if(xhr.status >= 400 && xhr.status < 500) return source.classList.add('obscured');

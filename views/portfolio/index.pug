@@ -14,7 +14,6 @@ else
   if projects
     each project in projects
       include ./_project
-      hr
   if currentUser.admin
     .flex.center.pad
       a.btn(data-click="modal" data-target="new-project" href="/portfolio/new") New Project

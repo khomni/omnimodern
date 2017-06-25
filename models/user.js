@@ -25,10 +25,35 @@ module.exports = function(sequelize, DataTypes) {
     },
     admin: { // just in case at some point in the future I need other users for this blasted thing
       type: DataTypes.BOOLEAN
+    },
+    url: {
+      type: DataTypes.VIRTUAL,
+      get: function(){
+        return '/users/' + this.getDataValue('username')
+      }
     }
   }, {
     classMethods: {
       associate: function(models) {
+
+        User.hasMany(models.Image, {
+          foreignKey: 'imageable_id',
+          constraints: false,
+          scope: {
+            imageable: 'User'
+          },
+          onDelete: 'cascade',
+        });
+
+        User.addScope('defaultScope', {
+          order: [['createdAt','ASC']],
+          include: [{model:models.Image, order:[['order','ASC']], limit:1}]
+        }, {override: true})
+
+        User.addScope('images', {
+          order: [['createdAt','ASC']],
+          include: [{model:models.Image}]
+        }, {override: true})
         
       },
     }

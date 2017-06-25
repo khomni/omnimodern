@@ -46,11 +46,7 @@ document.addEventListener('replaceImage', function(e){
     let otherImages = Array.prototype.slice.call(container.querySelectorAll('img'))
     container.appendChild(newImage)
 
-    setTimeout(function(){
-      otherImages.map(image=>{
-        image.remove()
-      })
-    }, 1000)
+    setTimeout(() => otherImages.map(image=> image.remove()), 1000)
 
   }
 })
