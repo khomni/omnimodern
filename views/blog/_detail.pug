@@ -1,0 +1,53 @@
+if !currentUser && post.Images
+  .flex.horz.pad.center
+    each image in post.Images
+      .preview-image-container
+        a(href=action + '/images/' + image.id data-click="modal")
+          img.preview-image(src=image.path)
+else
+  .flex.vert.drop-area
+    if post.Images
+      .flex.center.pad
+        each image in post.Images
+          .preview-image-container(data-kind="Image" data-ref=image.id)
+            a(href=action + '/images/' + image.id data-click="modal" data-target="image-"+image.id draggable="false")
+              img.preview-image(src=image.path draggable="false")
+            .preview-image-overlay.flex.distribute.pad
+              a.close(href=action + '/images/' + image.id + '/edit' data-response="modal"): i.fa.fa-wrench
+              form(action=action +  '/images/' + image.id method="delete" data-response="json" data-reaction="remove")
+                button.close(title="Delete Photo"): i.fa.fa-trash
+    form(action=action + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
+      label.btn
+        span Select Files
+        input(type="file" name="files" accept="image/*" multiple)
+      button.btn Upload
+
+.content
+  if !post.archived || currentUser && currentUser.admin
+    section.project(class=post.archived&&'obscured'||'').flex.horz.row.as.js
+      .flex.vert.grow
+        .project-subsection
+          .flex.horz
+            a.project-title(href='/blog/' + post.slug data-click="tab" data-target="main")
+              h1= post.title
+            .flex.grow.je.center
+              label.timestamp(data-time=post.updatedAt.getTime())
+        .project-subsection
+          .flex.horz
+            .flex.vert
+              .project-detail by #{post.User.name}
+              if post.Project
+                .project-detail for #[a(href='/portfolio/' + post.Project.url data-click="tab" data-target="main")= post.Project.title]
+                .project-detail in #[a(href='/portfolio?category=' + post.Project.category data-click="tab" data-target="main")= post.Project.category]
+        .project-subsection.markdown
+          if post.body
+            != markdown(post.body)
+
+        //- pre= JSON.stringify(post,null,'  ')
+      
+        if currentUser
+          .project-subsection
+              .flex.grow.vert: .flex.horz
+                form(action='/blog/' + post.slug).flex.center.pad
+                  a.btn(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit') Edit Post
+                  button.btn(formmethod="delete") Delete Post

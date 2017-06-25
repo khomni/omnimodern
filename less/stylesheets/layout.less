@@ -454,12 +454,12 @@ ol {
 
   & > li {
     position:relative; /* Create a positioning context */
-    margin:0 0 6px 2em; /* Give each list item a left margin to make room for the numbers */
-    padding:4px 8px; /* Add some spacing around the content */
+    margin:0 0 6px 0; /* Give each list item a left margin to make room for the numbers */
+    padding: 4px 8px; /* Add some spacing around the content */
     list-style:none; /* Disable the normal item numbering */
 
-
     &:before {
+      .no-select();
       color: @color-primary;
       width: 2em;
       font-size:1em;

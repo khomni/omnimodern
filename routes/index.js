@@ -10,16 +10,16 @@ var LocalStrategy = require('passport-local').Strategy;
 /* GET home page. */
 router.get('/', (req, res, next) => {
   if(req.isTab) return res.render('home');
-  return res.render('index',{href:'/'});
+  return res.render('index');
 });
 
-router.use('/', (req,res,next) => {
-  if(req.isTab || req.json || req.modal) return next();
-  return res.render('index', {href: req.url})
-})
+// router.use('/', (req,res,next) => {
+//   if(req.isTab || req.json || req.modal) return next();
+//   return res.render('index', {href: req.url})
+// })
 
 router.route('/admin')
-.get((req,res,next) => {
+.get(Common.middleware.statictab, (req,res,next) => {
   if(req.user) return next(Common.error.request('Already Logged In'));
 
   return db.User.count()
@@ -72,11 +72,12 @@ router.post('/signup', (req,res,next) => {
 
 
 router.get('/about', (req, res, next) => {
-  if(req.isTab) return res.render('about') 
-  return res.redirect('/')
+  if(req.isTab) return res.render('_about');
+  return res.render('about');
 })
 router.use('/portfolio', require('./portfolio'));
 router.use('/blog', require('./blog'));
+
 router.use('/i', require('./images'));
 
 module.exports = router;

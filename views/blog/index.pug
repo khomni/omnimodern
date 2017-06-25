@@ -1,14 +1,6 @@
-include /mixins/mixins
+extends /index
 
+block meta
 
-+pagination({baseUrl: action || "/blog", page: page, totalpages:pages})
-//- .tab-group
-  a.tab.last(href="?page=" + (page-1) data-click="tab" data-target="main" disabled=(page==0)) Back
-  a.tab.last(href="?page=" + (page+1) data-click="tab" data-target="main") Next
-.content
-  if blogposts
-    each post in blogposts
-      include ./_post
-  if currentUser.admin
-    .flex.center.pad
-      a.btn(data-click="modal" data-target="new-blog" href="/blog/new") New Blog Post
+block content
+  include ./_index

@@ -49,9 +49,8 @@ router.get('/', Common.middleware.querify, (req, res, next) => {
       res.locals.projects = projects
 
       if(req.json) return res.json(projects);
-      if(req.isTab) return res.render('portfolio/index');
-
-      return res.redirect('/');
+      if(req.isTab) return res.render('portfolio/_index');
+      return res.render('portfolio/index');
     })
 
   })
@@ -60,7 +59,6 @@ router.get('/', Common.middleware.querify, (req, res, next) => {
 });
 
 router.get('/new', Common.middleware.requireUser, (req,res,next) => {
-  
   return res.set('X-Modal', true).render('portfolio/edit');
 });
 
@@ -99,6 +97,7 @@ router.use('/:url', (req,res,next) => {
 
 projectRouter.get('/', (req,res,next)=> {
   if(req.json) return res.json(res.locals.project)
+  if(req.isTab) return res.render('portfolio/_detail')
   return res.render('portfolio/detail')
 })
 

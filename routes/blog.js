@@ -22,7 +22,8 @@ router.get('/', Common.middleware.querify, (req, res, next) => {
     res.locals.pages = Math.ceil(blogposts.count / limit)
 
     if(req.json) return res.json(blogposts);
-    if(req.isTab) return res.render('blog/index');
+    if(req.isTab) return res.render('blog/_index');
+    return res.render('blog/index');
   })
   .catch(next);
 });
@@ -67,8 +68,9 @@ router.use('/:slug', (req,res,next) => {
   .catch(next)
 }, blogRouter)
 
-blogRouter.get('/', (req,res,next)=>{
+blogRouter.get('/', (req,res,next) => {
   if(req.json) return res.json(res.locals.post)
+  if(req.isTab) return res.render('blog/_detail')
   return res.render('blog/detail')
 })
 

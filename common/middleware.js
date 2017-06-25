@@ -6,65 +6,6 @@ const formidable = require('formidable');
 const multer = require('multer');
 
 module.exports = {
-  // given a req.body with a number of dot-delimited field names, converts the req.body into the corresponding object
-  objectify: (req,res,next) => {
-    // console.log("1:",req.body)
-
-  return Promise.try(()=>{
-    // preserve the original body, just in case
-    req._body = Object.assign({},req.body);
-
-    for(let key in req._body) {
-      
-      //  any keys that are empty strings should be undefined so mongoose can unset fields
-      if(req.body[key] == '') req.body[key] = undefined;
-      if(!Array.isArray(req.body[key]) && /\.\$\./.test(key)) req.body[key] = [req.body[key]]
-
-      if(Array.isArray(req.body[key])) {
-        req.body[key] = req.body[key]
-
-        if(/\.\$/.test(key)) {
-          req.body[key].map((value,index) => {
-            req.body[key.replace('$',index)] = value
-          })
-
-          // delete the placeholder `$` key
-          delete req.body[key]
-        }
-      }
-    }
-    for(var key in req.body) if(!!Number(req.body[key])) req.body[key] = Number(req.body[key])
-    req.body = flat.unflatten(req.body)
-    return next();
-  })
-  .catch(next)
-  
-  },
-
-  querify: (req,res,next) => {
-
-    // returns converted input (recursive)
-    function convert(input) {
-      if(/[,;]/gi.test(input)) {
-        return input.split(/[,;]/gi).map(convert)
-      }
-
-      if(input.toLowerCase() === 'true') return true
-      if(input.toLowerCase() === 'false') return false
-
-      if(input==undefined || input=='') return undefined;
-      if(!isNaN(Number(input))) return Number(input)
-      return input
-    }
-
-    Object.keys(req.query).forEach(key => {
-      let query = req.query[key]
-      req.query[key] = convert(query)
-    })
-
-    return next();
-  },
-
   bufferFile: multer({
     storage: multer.memoryStorage(),
     limits: {
@@ -127,4 +68,69 @@ module.exports = {
     })
     .catch(next)
   },
+}
+
+// given a req.body with a number of dot-delimited field names, converts the req.body into the corresponding object
+module.exports.objectify = (req,res,next) => {
+    // console.log("1:",req.body)
+
+  return Promise.try(()=>{
+    // preserve the original body, just in case
+    req._body = Object.assign({},req.body);
+
+    for(let key in req._body) {
+      
+      //  any keys that are empty strings should be undefined so mongoose can unset fields
+      if(req.body[key] == '') req.body[key] = undefined;
+      if(!Array.isArray(req.body[key]) && /\.\$\./.test(key)) req.body[key] = [req.body[key]]
+
+      if(Array.isArray(req.body[key])) {
+        req.body[key] = req.body[key]
+
+        if(/\.\$/.test(key)) {
+          req.body[key].map((value,index) => {
+            req.body[key.replace('$',index)] = value
+          })
+
+          // delete the placeholder `$` key
+          delete req.body[key]
+        }
+      }
+    }
+    for(var key in req.body) if(!!Number(req.body[key])) req.body[key] = Number(req.body[key])
+    req.body = flat.unflatten(req.body)
+    return next();
+  })
+  .catch(next)
+}
+
+module.exports.querify = (req,res,next) => {
+
+  // returns converted input (recursive)
+  function convert(input) {
+    if(/[,;]/gi.test(input)) {
+      return input.split(/[,;]/gi).map(convert)
+    }
+
+    if(input.toLowerCase() === 'true') return true
+    if(input.toLowerCase() === 'false') return false
+
+    if(input==undefined || input=='') return undefined;
+    if(!isNaN(Number(input))) return Number(input)
+    return input
+  }
+
+  Object.keys(req.query).forEach(key => {
+    let query = req.query[key]
+    req.query[key] = convert(query)
+  })
+
+  return next();
+}
+
+// if the request is a static http request, render the default index page and load the content in dynamically
+module.exports.statictab = (req,res,next) => {
+  if(req.isTab || req.json || req.modal) return next();
+  console.log(req.originalUrl)
+  return res.render('index', {href: req.originalUrl})
 }

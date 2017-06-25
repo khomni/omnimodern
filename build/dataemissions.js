@@ -2,8 +2,6 @@
 
 function onXhrContentLoad(e) {
   let source = e.target
-  console.log("XHR loaded:", e)
-
   // set local timestamps
   Array.prototype.slice.call(source.querySelectorAll('[data-time]'))
   .map(timestamp => {

@@ -21,14 +21,15 @@ if !project.archived || currentUser && currentUser.admin
       if project.BlogPosts && project.BlogPosts.length > 0
         .panel-body
           h3 Recent Blog Posts
+          .panel-detail: a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
           ul
             each post in project.BlogPosts
               li #[a(href="/portfolio/" + project.url + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
-          a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
+          
 
     form.panel-actions
       if currentUser
-        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new" title="Add Blog Post"): i.fa.fa-plus
-        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit" title="Edit Project"): i.fa.fa-wrench
-        button.as-link.panel-action(formaction="/portfolio/" + project.url formmethod="delete" title="Delete Project"): i.fa.fa-trash
+        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new" title="Add Blog Post") Add Blog Post #[i.fa.fa-plus]
+        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit" title="Edit Project") Edit Project #[i.fa.fa-wrench]
+        button.as-link.panel-action(formaction="/portfolio/" + project.url formmethod="delete" title="Delete Project") Delete Project #[i.fa.fa-trash]
         

@@ -1,19 +1,6 @@
-include /mixins/mixins
+extends /index
 
-.tab-group
-  a.tab(href="/portfolio"  data-click="tab" data-target="main" class=!category&&'active'||'') All
-  each value,cat in aggregation||[]
-    a.tab(href="/portfolio?category=" + cat data-click="tab" data-target="main" class=category==cat&&'active'||'')= cat
-if category
-  +pagination({baseUrl: '/portfolio?category='+ category, page:page, totalpages:pages})
-else
-  +pagination({baseUrl: '/portfolio', page:page, totalpages:pages})
+block meta
 
-
-.content
-  if projects
-    each project in projects
-      include ./_project
-  if currentUser.admin
-    .flex.center.pad
-      a.btn(data-click="modal" data-target="new-project" href="/portfolio/new") New Project
+block content
+  include ./_index

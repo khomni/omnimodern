@@ -7,7 +7,6 @@ const Navbar = require('./navbar');
 const Favicon = require('./favicon');
 const Modal = require('./modal');
 const Drag = require('./ui/drag');
-
 var pageInitialized = false;
 
 document.onreadystatechange = function(){
