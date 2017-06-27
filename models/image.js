@@ -75,9 +75,16 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
 
+        // populates the thing the image belongs to
+        Image.Instance.prototype.getImageable = function(query) {
+          return models[this.imageable].find({where:{id:this.imageable_id}})
+        }
+
       },
     }
   });
+
+
 
   Image.beforeValidate((image, options) => {
     if(!image._file) throw new Error('No file provided')

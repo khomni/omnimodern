@@ -1,8 +1,16 @@
 "use strict";
 
+const marked = require('marked');
+const cheerio = require('cheerio');
+
 module.exports = function(sequelize, DataTypes) {
   var Project = sequelize.define("Project", {
-
+    path: {
+      type:DataTypes.VIRTUAL,
+      get: function(){
+        return '/portfolio/' + this.url
+      }
+    },
     url: { // a routeable URL for this project
       type: DataTypes.STRING,
       unique: true,
@@ -26,7 +34,26 @@ module.exports = function(sequelize, DataTypes) {
     description: { // a synopsis of the summary
       type: DataTypes.TEXT,
     },
-
+    $description: {
+      type: DataTypes.VIRTUAL,
+      get: function() {
+        if(!this.description) return null;
+        let processedBody = this.description
+        if(this.Images) {
+          processedBody += '\r' + this.Images.map((image, i) => `[${i}]: ${image.path}`).join('\n')
+        }
+        return marked(processedBody)
+      }
+    },
+    $description_preview: {
+      type: DataTypes.VIRTUAL,
+      get: function(){
+        if(!this.description) return null;
+        let $ = cheerio.load(this.$description, {withDomLvl1: false});
+        let preview = $.html($('body').find('p,h3,h4,h5').slice(0,3))
+        return preview
+      }
+    },
     status: {
       type: DataTypes.ENUM,
       defaultValue: 'planning',

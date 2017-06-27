@@ -1,12 +1,6 @@
 if !post.archived || currentUser && currentUser.admin
   section.panel(class=post.archived&&'obscured'||'')
     .panel-content
-      if post.Images && post.Images.length > 0
-        .preview-image-container
-          a(href=action + '/' + post.slug  data-click="tab" data-target="main")
-            img.preview-image(src=post.Images[0].path)
-          if post.Images.length > 1
-              label.preview-image-overlay.preview-image-label #{post.Images.length} Images
       .panel-header
         a.panel-title(href=action + '/' + post.slug data-click="tab" data-target="main")
           h2= post.title
@@ -17,24 +11,22 @@ if !post.archived || currentUser && currentUser.admin
           .panel-detail for #[a(href="/portfolio/" + post.Project.url data-click="tab" data-target="main")= post.Project.title]
           .panel-detail in #[a(href="/portfolio?category=" + post.Project.category data-click="tab" data-target="main")= post.Project.category]
       hr
-      .panel-body(class=post.truncated&&'truncate'||'')
+      if post.Images && post.Images.length > 0
+        .preview-image-container
+          a(href=action + '/' + post.slug  data-click="tab" data-target="main")
+            img.preview-image(src=post.Images[0].path)
+          if post.Images.length > 1
+              label.preview-image-overlay.preview-image-label #{post.Images.length} Images
+      .panel-body.truncate
         if post.body
-          .truncated.markdown: != markdown(post.body_preview)
+          .truncated.markdown: != post.$body_preview
         //- .flex.horz
           if post.User.Images.length
             img.preview-photo(src=post.User.Images[0].path)
           .flex.vert
             
     form(action='/blog/' + post.slug).panel-actions
-      if post.truncated
-        a.panel-action(href=action + '/' + post.slug data-click="tab" data-target="main") See More
+      a.panel-action(href=action + '/' + post.slug data-click="tab" data-target="main") See More
       if currentUser
-        a.panel-action(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit' title="Edit Post") Edit #[i.fa.fa-wrench]
-        button.as-link.panel-action(formmethod="delete" title="Delete Post") Delete #[i.fa.fa-trash]
-      //- .project-subsection.markdown(class=post.truncated&&'truncated'||'')
-        if post.body
-          != markdown(post.body_preview)
-      //- if post.truncated
-        a(href=action + '/' + post.slug data-click="tab" data-target="main") See More
-
-      //- pre= JSON.stringify(post,null,'  ')
+        a.panel-action(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit' title="Edit Post") #[i.fa.fa-wrench] Edit
+        button.as-link.panel-action(formmethod="delete" title="Delete Post") #[i.fa.fa-trash] Delete

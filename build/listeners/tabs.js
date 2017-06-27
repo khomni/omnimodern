@@ -39,7 +39,7 @@ document.addEventListener('show.tab', function(e) {
   }
 
   target.addEventListener('loaded', function tabLoaded(e){
-    history.pushState({href: href}, null, href)
+    history.pushState({href: e.detail.responseURL}, null, e.detail.responseURL)
     // exampine the tab's XHR response
     let xhr = e.detail;
     // remove this listener after it fires
@@ -75,6 +75,10 @@ document.addEventListener('load.pane', function(e){
 
   Ajax.fetch({url:href, method:'get', headers:{'Accept': 'text/html', 'X-Tab-Content': true}})
   .then(xhr => {
+    let redirect = xhr.getResponseHeader('X-Redirect')
+    if(redirect) {
+      return thisPane.dispatchEvent(new CustomEvent('load.pane', {detail: {href:redirect}, bubbles:true, cancelable:true}));
+    }
     // send the xhr resonse to the tab
     let html = xhr.responseText
 

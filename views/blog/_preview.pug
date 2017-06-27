@@ -3,6 +3,6 @@
     a(href=action + "/blog/" + post.slug data-click="tab" data-target="main")= post.title
     .flex.grow.je.center
       label.timestamp(data-time=post.updatedAt.getTime())
-  if post.body_preview
+  if post.$body_preview
     .blogpost-preview-body
-      != markdown(post.body_preview)
+      != post.$body_preview

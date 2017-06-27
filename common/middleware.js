@@ -45,7 +45,7 @@ module.exports = {
       }
       res.locals.action = req.originalUrl;
       res.locals.body = req.body;
-      return res.set('X-Modal',true).render('modals/confirmDelete',{
+      return res.status(406).set('X-Modal',true).render('modals/confirmDelete',{
         action: req.originalUrl,
         body: req.body,
         reaction: reaction

@@ -9,8 +9,15 @@ var LocalStrategy = require('passport-local').Strategy;
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  if(req.isTab) return res.render('home');
-  return res.render('index');
+
+  return db.Image.findAll({order:[['createdAt','DESC']]})
+  .then(images => {
+    res.locals.images = images
+    if(!req.isTab) return res.render('index');
+    return res.render('home');
+  })
+  .catch(next)
+
 });
 
 // router.use('/', (req,res,next) => {
@@ -68,15 +75,18 @@ router.post('/signup', (req,res,next) => {
     })
   })
   .catch(next)
-})
+});
 
 
 router.get('/about', (req, res, next) => {
   if(req.isTab) return res.render('_about');
   return res.render('about');
-})
+});
+
 router.use('/portfolio', require('./portfolio'));
 router.use('/blog', require('./blog'));
+
+router.use('/images', require('./images'))
 
 router.use('/i', require('./images'));
 

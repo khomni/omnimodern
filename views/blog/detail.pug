@@ -1,7 +1,14 @@
 extends /index
 
 block meta
-  meta(content="it worked")
+  //- Add meta information here
+  meta(property="og:title"  content=post.title)
+  meta(property="og:site_name"  content="Omnigoat Design")
+  if post.Images.length >0 
+    meta(property="og:image"  content=post.Images[0].path)
+  else
+    meta(property="og:image" content="/images/header.png")
+  meta(property="og:type" content="category")
 
 block content
   include ./_detail

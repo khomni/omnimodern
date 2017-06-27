@@ -1,0 +1,4 @@
+if image
+  .preview-image-container
+    a(href='/images/' + image.id data-click="tab" data-target="main")
+      img.preview-image(src=image.path)

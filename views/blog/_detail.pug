@@ -13,7 +13,7 @@ else
             a(href=action + '/images/' + image.id data-click="modal" data-target="image-"+image.id draggable="false")
               img.preview-image(src=image.path draggable="false")
             .preview-image-overlay.flex.distribute.pad
-              a.close(href=action + '/images/' + image.id + '/edit' data-response="modal"): i.fa.fa-wrench
+              a.close(href=action + '/images/' + image.id + '/edit' data-click="modal"): i.fa.fa-wrench
               form(action=action +  '/images/' + image.id method="delete" data-response="json" data-reaction="remove")
                 button.close(title="Delete Photo"): i.fa.fa-trash
     form(action=action + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
@@ -41,7 +41,7 @@ else
                 .project-detail in #[a(href='/portfolio?category=' + post.Project.category data-click="tab" data-target="main")= post.Project.category]
         .project-subsection.markdown
           if post.body
-            != markdown(post.body)
+            != post.$body
 
         //- pre= JSON.stringify(post,null,'  ')
       

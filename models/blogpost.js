@@ -1,7 +1,16 @@
 "use strict";
 
+const marked = require('marked');
+const cheerio = require('cheerio');
+
 module.exports = function(sequelize, DataTypes) {
   var BlogPost = sequelize.define("BlogPost", {
+    path: {
+      type:DataTypes.VIRTUAL,
+      get: function(){
+        return '/blog/' + this.slug
+      }
+    },
     slug: { // sluggable url
       type: DataTypes.STRING,
       unique: true,
@@ -11,21 +20,26 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING
     },
     body: { // body of the blog post; supports markup / HTML
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT,
     },
-    body_preview: {
+    $body: { // markup version of the body; automatically adds images in the footnotes
       type: DataTypes.VIRTUAL,
-      get: function(){
-        if(this.body) {
-          let preview = (this.body||"").split(/\n+/).slice(0,3).join('\n\n')
-          return preview
+      get: function() {
+        if(!this.body) return null;
+        let processedBody = this.body
+        if(this.Images) {
+          processedBody += '\r' + this.Images.map((image, i) => `[${i}]: ${image.path}`).join('\n')
         }
+        return marked(processedBody)
       }
     },
-    truncated: {
-      type: DataTypes.VIRTUAL, 
+    $body_preview: {
+      type: DataTypes.VIRTUAL,
       get: function(){
-        return (this.body||"").split(/\n+/).length > 3
+        if(!this.$body) return null;
+        let $ = cheerio.load(this.$body);
+        let preview = $.html($('body').find('p,h3,h4,h5').slice(0,3))
+        return preview
       }
     },
     archived: { // blog post has been archived
