@@ -79,8 +79,7 @@ module.exports = function(sequelize, DataTypes) {
           constraints: false,
           scope: {
             imageable: 'Project'
-          },
-          onDelete: 'cascade',
+          }
         });
 
         Project.addScope('defaultScope',{
@@ -104,6 +103,11 @@ module.exports = function(sequelize, DataTypes) {
             order: [['createdAt','DESC']], 
             limit: 5
           }]
+        })
+
+        // delete images on destruction
+        Project.hook('beforeDestroy', function(project, options){
+          return models.Image.destroy({where:{imageable_id: project.id}})
         })
       }
     }

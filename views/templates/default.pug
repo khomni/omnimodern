@@ -15,7 +15,10 @@ block main
     block header
       header#header
         if headerImage
-          img.header-image(src=headerImage draggable="false")
+          img(src=headerImage draggable="false")
+        .header-content
+          .header-item
+            h1 OmniGoat Design
         //- .header-text OmniGoat
     #content-main&attributes({class: THEME})
       .tab-group

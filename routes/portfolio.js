@@ -110,7 +110,7 @@ projectRouter.patch('/', Common.middleware.requireUser, Common.middleware.object
   .catch(next)
 })
 
-projectRouter.delete('/', Common.middleware.requireUser, Common.middleware.objectify, (req,res,next) => {
+projectRouter.delete('/', Common.middleware.confirm({route:'portfolio',disallowBypass:true}), Common.middleware.requireUser, Common.middleware.objectify, (req,res,next) => {
 
   return res.locals.project.destroy()
   .then(project => {

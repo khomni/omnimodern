@@ -3,7 +3,7 @@ include ./comments
 
 mixin pagination(pageObject)
   - var symbol = /\?/.test(pageObject.baseUrl) ? "&" : "?"
-  if pageObject.pages > 1 || pageObject.page > 1
+  if pageObject.totalpages > 1 || pageObject.page > 1
     .tab-group
       case pageObject.page
         when 1

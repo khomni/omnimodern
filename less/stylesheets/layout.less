@@ -190,7 +190,6 @@ code {
 
 header {
   height: 200px;
-  background: @color-dark;
   overflow: hidden;
   &.large {
     height: 400px;
@@ -206,10 +205,10 @@ header {
     .animation(rainbow 30s linear infinite);
   }
   .header-content {
+    position: absolute;
     color: white;
     padding-bottom: 1rem;
     padding-top: @navbar-size;
-    position: relative;
     width: 100%;
     height: 100%;
     z-index: 2;
@@ -217,8 +216,9 @@ header {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
+    text-shadow: 0px 1px 1px fade(black,50%);
+
     .header-item {
-      .darkbox();
       padding: 0.5rem 1rem;
       max-width: 100vw;
       & + .header-item {

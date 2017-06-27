@@ -12,6 +12,12 @@ router.get('/', (req, res, next) => {
 
   return db.Image.findAll({order:[['createdAt','DESC']]})
   .then(images => {
+    if(images.length) {
+      let randomImage = images[Math.floor(Math.random()*images.length)].path
+      res.locals.headerImage = randomImage
+      res.set('X-Header-Image', randomImage);
+    }
+
     res.locals.images = images
     if(!req.isTab) return res.render('index');
     return res.render('home');

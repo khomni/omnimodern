@@ -1,0 +1,21 @@
+.modal-dialog
+  .modal-content
+    form(action=action method=method data-response="json")
+      .modal-title= options.title || "Are you sure?"
+      .modal-body.flex.center
+        if options.message
+          .flex.vert.pad.as= options.message
+        .flex.vert.pad.as
+          each value,key in body
+            input(type="hidden" name=key value=value)
+          
+          label.checkbox
+            input(type="checkbox" name="confirm" value="true" required)
+            span Yes I'm Sure
+          if !options.disallowBypass
+            label.checkbox
+              input(type="checkbox" name="disable" value="true")
+              span Don't warn me in the future
+      .modal-footer
+        .flex.center.pad
+          button.btn Confirm

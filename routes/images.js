@@ -57,6 +57,7 @@ router.use('/:id', (req,res,next) => {
 
     return db.Image.find({where: {id: req.params.id}})
     .then(image => {
+      if(!image) return null;
       return image.getImageable()
       .then(imageable => {
         res.locals.imageable = imageable
@@ -65,6 +66,7 @@ router.use('/:id', (req,res,next) => {
     })
   })
   .then(image => {
+    if(!image) throw Common.error.notfound('Image');
     res.locals.image = image
     res.locals.headerImage = image.path
     res.set('X-Header-Image', image.path)
@@ -77,17 +79,26 @@ router.use('/:id', (req,res,next) => {
 // get an image in various forms of markup
 imageRouter.get('/', (req,res,next) => {
   if(!res.locals.image) return next();
-  if(req.isTab && res.locals.imageable && res.locals.imageable.path) return res.set('X-Redirect', res.locals.imageable.path).sendStatus(302);
+  if(req.isTab) {
+    if(res.locals.imageable && res.locals.imageable.path) return res.set('X-Redirect', res.locals.imageable.path).sendStatus(302);
+    return res.set('X-Modal', true).render('images/modals/preview')
+  } 
   if(req.modal) return res.render('images/modals/preview')
   return res.redirect(res.locals.image.path)
 });
 
 
-imageRouter.delete('/', Common.middleware.requireUser, Common.middleware.confirmDelete('remove'), (req,res,next) => {
+imageRouter.delete('/', Common.middleware.requireUser, Common.middleware.confirm({route:'images'}), (req,res,next) => {
   if(!res.locals.image) return next();
 
   return res.locals.image.destroy()
-  .then(()=>{
+  .then(() => {
+    if(req.isTab || req.modal) {
+      if(res.locals.imageable && res.locals.imageable.path) {
+        return res.set('X-Redirect', res.locals.imageable.path).sendStatus(302)
+      }
+      return res.set('X-Redirect', '/').sendStatus(302)
+    }
     return res.json({ref:res.locals.image, kind:"Image"})
   })
   .catch(next)

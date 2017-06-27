@@ -35,9 +35,31 @@ module.exports = {
     return next();
   },
 
+  confirm: options => {
+    options = options || {}
+
+    return (req,res,next) => {
+
+      let route = options.route || req.baseUrl.replace(/[^a-zA-Z_-]+/gi,'/')
+      req.session.confirmations = req.session.confirmations || {}
+      req.session.confirmations[route] = req.session.confirmations[route] || {}
+      if(req.body.confirm || req.session.confirmations[route][req.method]) {
+        if(req.body.disable) req.session.confirmations[route][req.method] = true; // ignore future warnings
+        return next(); // proceed with the rest of the route
+      }
+
+      res.locals.action = req.originalUrl;
+      res.locals.body = req.body;
+      res.locals.method = req.method;
+
+      return res.status(406).set('X-Modal',true).render('modals/confirm', {options})
+
+    }
+  },
+
   confirmDelete: (reaction) => {
     return (req,res,next) => {
-      let route = req.baseUrl.replace(/[^a-zA-Z]+/gi,'/')
+      let route = req.baseUrl.replace(/[^a-zA-Z_-]+/gi,'/')
       req.session.confirmedDeletes = req.session.confirmedDeletes || {}
       if(req.body.confirm || req.session.confirmedDeletes[route]) {
         if(req.body.disable) req.session.confirmedDeletes[route] = true;

@@ -1,6 +1,5 @@
 include /mixins/mixins
 
-
 +pagination({baseUrl: action || "/blog", page: page, totalpages:pages})
 //- .tab-group
   a.tab.last(href="?page=" + (page-1) data-click="tab" data-target="main" disabled=(page==0)) Back

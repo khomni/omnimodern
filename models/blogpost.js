@@ -61,18 +61,17 @@ module.exports = function(sequelize, DataTypes) {
           constraints: false,
           scope: {
             imageable: 'BlogPost'
-          },
-          onDelete: 'cascade',
+          }
         });
 
         BlogPost.addScope('defaultScope', {
           order: [['createdAt','DESC']],
-          include: [{model:models.User}, {model:models.Image, limit:1}]
+          include: [{model:models.User, required:false}, {model:models.Image, limit:1, required:false}]
         }, {override: true})
 
         BlogPost.addScope('images', {
           order: [['createdAt','DESC']],
-          include: [{model:models.Image}]
+          include: [{model:models.Image, required:false}]
         })
 
         BlogPost.addScope('project', {
@@ -82,7 +81,12 @@ module.exports = function(sequelize, DataTypes) {
 
         BlogPost.addScope('user', {
           order: [['createdAt','DESC']],
-          include: [{model:models.User}]
+          include: [{model:models.User, required:false}]
+        })
+
+        // delete images on destruction
+        BlogPost.hook('beforeDestroy', function(post, options){
+          return models.Image.destroy({where:{imageable_id: post.id}})
         })
 
       }
@@ -96,7 +100,7 @@ module.exports = function(sequelize, DataTypes) {
     let isUnique = false;
     let iteration = 0;
     let nameComponents = 1;
-    let slug = post.getDataValue('title').toLowerCase().trim().split(/\s/).slice(0,10).join('-')
+    let slug = String(post.getDataValue('title')).toLowerCase().trim().split(/\s/).slice(0,10).join('-').replace(/[^a-z0-9_-]/gi,'')
     let slugIteration = slug;
 
 
@@ -110,9 +114,7 @@ module.exports = function(sequelize, DataTypes) {
         return slugIteration = slug + '-' + (++iteration)
       })
     })
-    .then( ()=> {
-      return post;
-    });
+    .then(() => post);
   }
 
   BlogPost.hook('beforeCreate', generateSlug)

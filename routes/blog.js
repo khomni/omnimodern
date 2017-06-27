@@ -14,7 +14,7 @@ router.get('/', Common.middleware.querify, (req, res, next) => {
   res.locals.action = req.baseUrl
   if(res.locals.project) query.ProjectId = res.locals.project.id
 
-  return db.BlogPost.scope(['project', 'user', 'images']).findAndCountAll({where:query, limit: limit, offset: offset })
+  return db.BlogPost.findAndCountAll({where:query, limit: limit, offset: offset})
   .then(blogposts => {
     res.locals.blogposts = blogposts.rows
     res.locals.total = blogposts.count
@@ -52,7 +52,7 @@ router.use('/:slug', (req,res,next) => {
 
   return db.BlogPost.scope(['images','project','user']).find({where: {slug: req.params.slug}})
   .then(blogpost => {
-    if(!blogpost) throw Common.error.notfound('Blog post not found')
+    if(!blogpost) throw Common.error.notfound('Blog Post')
     res.locals.post = blogpost
     res.locals.action = req.baseUrl
 
@@ -86,7 +86,7 @@ blogRouter.patch('/', Common.middleware.requireUser, Common.middleware.objectify
   .catch(next)
 })
 
-blogRouter.delete('/', Common.middleware.requireUser, Common.middleware.objectify, (req,res,next)=>{
+blogRouter.delete('/', Common.middleware.confirm({route:'blog'}) ,Common.middleware.requireUser, Common.middleware.objectify, (req,res,next)=>{
   return res.locals.post.destroy()
   .then(blogpost => {
     return res.set('X-Redirect', '/blog').sendStatus(302)
