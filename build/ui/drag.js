@@ -19,7 +19,6 @@ var drag = {
         if(!drag.dragging) return false; // mouse has been released before the next frame has been obtained
         clearTimeout(reset)
         reset = setTimeout(()=>{
-          console.log('debounce')
           lastKnownX = lastKnownY = null
           element.classList.remove('drag-x','drag-y')
         },50)
@@ -38,10 +37,8 @@ var drag = {
         currentY = Math.max(0,(e.clientY - handleRect.height/2 - (noHandle ? 0 : handleRect.offsetTop)))
 
         let speedX = Math.abs(currentX - (lastKnownX||currentX))
-        let speedY = Math.abs(currentY - (lastKnownY||lastKnownY))
+        let speedY = Math.abs(currentY - (lastKnownY||currentY))
 
-        console.log(speedX, speedY)
-        
         if(speedX > speedY && speedX > 10) drag.dragging.elem.classList.add('drag-x');
         else drag.dragging.elem.classList.remove('drag-x')
         if(speedY > speedX && speedY > 10) drag.dragging.elem.classList.add('drag-y');

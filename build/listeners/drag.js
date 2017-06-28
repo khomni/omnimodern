@@ -40,6 +40,9 @@ const Modal = require('../modal');
         document.body.classList.remove('loading');
 
         if(upload.status != 200) return Modal.methods.createModal(upload.responseText);
+
+        dropArea.dispatchEvent(new Event('reload', {bubbles:true, cancelable:true}));
+
         // return window.location.reload();
 
 

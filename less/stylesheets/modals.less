@@ -58,7 +58,7 @@ body.modal-open {
 	&:not(:last-child) {
 		.sm-plus({
 			.cursor(pointer);
-			input,select,textarea,a,button {
+			input,select,textarea,a,button:not(.close) {
 				pointer-events:none;
 			}
 			.filter(brightness(0.5) contrast(1.5));

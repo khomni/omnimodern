@@ -7,6 +7,11 @@ var models = require('../models');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
+
+router.use('/', (req,res,next) => {
+  res.locals.href = req.originalUrl
+  return next();
+})
 /* GET home page. */
 router.get('/', (req, res, next) => {
 

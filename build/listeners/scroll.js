@@ -21,7 +21,6 @@
 			speed = Math.abs(currentPosition - (lastKnownPosition||currentPosition))
 
 			if(speed > 10) {
-				console.log(`speed: ${speed}; currentPos: ${currentPosition}; lkp: ${lastKnownPosition}`)
 				if(!isBlurred) {
 					isBlurred = true;
 					document.body.classList.add('scroll-blur');

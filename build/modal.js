@@ -74,7 +74,7 @@ function Modal(elem) {
     return true;
   },true);
 
-  var focusable = Array.prototype.slice.call(elem.querySelectorAll('input,a,button,select,textarea'))
+  var focusable = Array.prototype.slice.call(elem.querySelectorAll('input,a,select,textarea,button:not(.close)'))
   focusable.map(i => {
     i.addEventListener('focus', e => {
       thisModal.focus()

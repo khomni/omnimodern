@@ -38,7 +38,8 @@ document.addEventListener('show.tab', function(e) {
   if(!target.setReload) {
     target.setReload = true;
     target.addEventListener('reload', function reloadTab(e){
-      target.dispatchEvent(new Event('load.pane',{bubbles:true, cancelable:true}))
+      e.stopPropagation();
+      target.dispatchEvent(new Event('load.pane', {bubbles:true, cancelable:true}))
     });
   }
 

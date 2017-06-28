@@ -1,15 +1,9 @@
-
-.flex.vert(class=currentUser&&'drop-area')
-  if project.Images
-    .flex.center.pad
-      each image in project.Images
-        include ../images/preview-image
-  if currentUser
-    form(action="/portfolio/" + project.url + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
-      label.btn
-        span Select Files
-        input(type="file" name="files" accept="image/*" multiple)
-      button.btn Upload
+if currentUser
+  .project-subsection
+    form.flex.center.pad
+      a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new") Add Blog
+      a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit") Edit Project
+      button.btn(formaction="/portfolio/" + project.url formmethod="delete") Delete Project
 
 .content
   .project.flex.vert.fill
@@ -36,12 +30,15 @@
             -action = "/portfolio/" + project.url + "/blog"
             include ../blog/_post
         a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
-    
 
-
-  if currentUser
-    .project-subsection
-      form.flex.center.pad
-        a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new") Add Blog
-        a.btn(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit") Edit Project
-        button.btn(formaction="/portfolio/" + project.url formmethod="delete") Delete Project
+  .flex.vert(class=currentUser&&'drop-area')
+    if project.Images
+      .flex.center.pad
+        each image in project.Images
+          include ../images/preview-image
+    if currentUser
+      form(action="/portfolio/" + project.url + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
+        label.btn
+          span Select Files
+          input(type="file" name="files" accept="image/*" multiple)
+        button.btn Upload

@@ -12,6 +12,16 @@ function onXhrContentLoad(e) {
   // load any panels that are active and have hrefs
   Array.prototype.slice.call(source.querySelectorAll('.tab-pane.active[href]'))
   .map(preloadPanel => {
+
+    // add listeners for panels that have href values by default
+    if(!preloadPanel.setReload) {
+      preloadPanel.setReload = true;
+      preloadPanel.addEventListener('reload', function reloadTab(e){
+        e.stopPropagation();
+        preloadPanel.dispatchEvent(new Event('load.pane', {bubbles:true, cancelable:true}))
+      });
+    }
+
     preloadPanel.dispatchEvent(new Event('load.pane', {bubbles:true, cancelable:true}))
 
     let href = preloadPanel.getAttribute('href');

@@ -9,7 +9,6 @@ var dom = require('./dom.js');
     var clickAction = source.dataset.click
     if(!clickAction) return true;
     e.preventDefault();
-
     // duplicate an element or template in the dom and append it to the 'destination'
     if(clickAction == 'duplicate' && source.dataset.target && source.dataset.destination) {
       return dom.duplicate(source.dataset.target, source.dataset.destination)
