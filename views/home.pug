@@ -1,3 +1,5 @@
 .flex.horz.pad.center
   each image in images
-    include ./images/preview-image
+    .preview-image-container
+      a(href= '/images/' + image.id data-click="tab" data-target="main")
+        img.preview-image(src=image.path)

@@ -1,3 +1,7 @@
+'use strict';
+
+const Anim = require('../extensions/anim');
+
 window.addEventListener('popstate', e => {
   if(!e.state.href) return true;
   let main = document.getElementById('main');
@@ -40,12 +44,12 @@ document.addEventListener('show.tab', function(e) {
 
   target.addEventListener('loaded', function tabLoaded(e){
     history.pushState({href: e.detail.responseURL}, null, e.detail.responseURL)
+    target.classList.remove('loading');
     // exampine the tab's XHR response
     let xhr = e.detail;
     // remove this listener after it fires
     target.removeEventListener('loaded', tabLoaded)
   
-
     source.classList.remove('error','obscured');
     if(xhr.status >= 500 && xhr.status < 600) return source.classList.add('error');
     if(xhr.status >= 400 && xhr.status < 500) return source.classList.add('obscured');
@@ -72,6 +76,7 @@ document.addEventListener('load.pane', function(e){
   let href = (e.detail&&e.detail.href) || thisPane.getAttribute('href');
   if(!href) return false;
   main.setAttribute('href', href);
+  thisPane.classList.add('loading');
 
   Ajax.fetch({url:href, method:'get', headers:{'Accept': 'text/html', 'X-Tab-Content': true}})
   .then(xhr => {
@@ -86,11 +91,10 @@ document.addEventListener('load.pane', function(e){
 
     thisPane.classList.remove('error');
     thisPane.innerHTML = html;
+    if(!xhr.responseURL) xhr.responseURL = href
     thisPane.dispatchEvent(new CustomEvent('loaded', {detail: xhr, bubbles:true, cancelable:true}));
   })
-  .catch(err => {
-    thisPane.classList.add('error')
-  })
+  .catch(err => thisPane.classList.add('error'))
 
 })
 
@@ -104,7 +108,12 @@ document.addEventListener('show.pane', function(e){
     return node.classList.add('active');
   });
   
-  thisPane.dispatchEvent(new Event('shown.pane'))
-  document.dispatchEvent(new Event('scroll'))
+  thisPane.dispatchEvent(new Event('shown.pane'));
 
+  // SCROLL BACK
+  // when a tab loads, if its offest is above the top of the screen, the window should smoothly scroll up until the top is visible;
+  let target = thisPane.getBoundingClientRect().top + window.scrollY
+  // target scroll destination is above
+  Anim.scrollTo(target, {down:false})
+  document.dispatchEvent(new Event('scroll'))
 });

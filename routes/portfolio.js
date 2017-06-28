@@ -78,10 +78,10 @@ let projectRouter = express.Router({mergeParams:true});
 router.use('/:url', (req,res,next) => {
   db.Project.scope(['images']).find({where:{url:req.params.url}, include:[
     {model:db.BlogPost, limit: 3}
-    ]})
+  ]})
   .then(project => {
-    if(!project) return Common.error.notfound('Project not found');
-    res.locals.project = project
+    if(!project) throw Common.error.notfound('Project');
+    res.locals.project = res.locals.imageable = project
 
     if(project.Images && project.Images.length > 0) {
       let randomImage = project.Images[Math.floor(Math.random()*project.Images.length)].path
@@ -110,7 +110,7 @@ projectRouter.patch('/', Common.middleware.requireUser, Common.middleware.object
   .catch(next)
 })
 
-projectRouter.delete('/', Common.middleware.confirm({route:'portfolio',disallowBypass:true}), Common.middleware.requireUser, Common.middleware.objectify, (req,res,next) => {
+projectRouter.delete('/', Common.middleware.confirm({route:'portfolio', disallowBypass:true}), Common.middleware.requireUser, Common.middleware.objectify, (req,res,next) => {
 
   return res.locals.project.destroy()
   .then(project => {

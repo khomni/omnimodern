@@ -14,23 +14,21 @@ if !project.archived || currentUser && currentUser.admin
         label.timestamp(data-time=project.updatedAt.getTime())
       .panel-details
         .panel-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
-        .panel-detail= project.status
+        .panel-detail – #{project.status}
+      if currentUser
+        form.panel-actions
+          a.btn.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new" title="Add Blog Post") #[i.fa.fa-plus] Add Blog Post
+          a.btn.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit" title="Edit Project") #[i.fa.fa-wrench] Edit Project
+          button.btn.panel-action(formaction="/portfolio/" + project.url formmethod="delete" title="Delete Project") #[i.fa.fa-trash] Delete Project
       hr
       .panel-body
         .markdown: != project.$description_preview
     .panel-content
       if project.BlogPosts && project.BlogPosts.length > 0
-        .panel-body
-          h3 Recent Blog Posts
-          .panel-detail: a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
-          ul
-            each post in project.BlogPosts
-              li #[a(href="/portfolio/" + project.url + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
-          
+        h3 Recent Blog Posts
+        ul
+          each post in project.BlogPosts
+            li #[a(href="/portfolio/" + project.url + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
+        .panel-detail: a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
 
-    form.panel-actions
-      if currentUser
-        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/blog/new" title="Add Blog Post") #[i.fa.fa-plus] Add Blog Post
-        a.panel-action(data-click="modal" data-target="edit-project" href="/portfolio/" + project.url +"/edit" title="Edit Project") #[i.fa.fa-wrench] Edit Project
-        button.as-link.panel-action(formaction="/portfolio/" + project.url formmethod="delete" title="Delete Project") #[i.fa.fa-trash] Delete Project
         

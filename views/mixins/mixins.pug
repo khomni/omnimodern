@@ -13,7 +13,7 @@ mixin pagination(pageObject)
 
       - let i = 1;
       while i <= pageObject.totalpages
-        a.tab(href=pageObject.baseUrl + symbol + "page=" + i disabled=(i==pageObject.page))= i
+        a.tab(href=pageObject.baseUrl + symbol + "page=" + i disabled=(i==pageObject.page) data-click="tab" data-target="main")= i
         - i++
 
       a.tab(href=pageObject.baseUrl + symbol + "page=" + (pageObject.page+1) data-click="tab" data-target="main" disabled=(pageObject.page >= pageObject.totalpages)) Next

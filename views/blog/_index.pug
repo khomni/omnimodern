@@ -4,10 +4,15 @@ include /mixins/mixins
 //- .tab-group
   a.tab.last(href="?page=" + (page-1) data-click="tab" data-target="main" disabled=(page==0)) Back
   a.tab.last(href="?page=" + (page+1) data-click="tab" data-target="main") Next
+if currentUser.admin
+  .flex.center.pad
+    a.btn(data-click="modal" data-target="new-blog" href="/blog/new") New Blog Post
 .content
   if blogposts
     each post in blogposts
       include ./_post
-  if currentUser.admin
-    .flex.center.pad
-      a.btn(data-click="modal" data-target="new-blog" href="/blog/new") New Blog Post
+    .flex.pad.fill
+      if page > 1
+          a.btn(href="?page=" + (page-1) data-click="tab" data-target="main") Back
+      if page < pages
+        a.btn(href="?page=" + (page+1) data-click="tab" data-target="main") Next

@@ -10,6 +10,10 @@ if !post.archived || currentUser && currentUser.admin
         if post.Project
           .panel-detail for #[a(href="/portfolio/" + post.Project.url data-click="tab" data-target="main")= post.Project.title]
           .panel-detail in #[a(href="/portfolio?category=" + post.Project.category data-click="tab" data-target="main")= post.Project.category]
+      if currentUser
+        form(action='/blog/' + post.slug).panel-actions
+          a.btn.panel-action(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit' title="Edit Post") #[i.fa.fa-wrench] Edit
+          button.btn.panel-action(formmethod="delete" title="Delete Post") #[i.fa.fa-trash] Delete
       hr
       if post.Images && post.Images.length > 0
         .preview-image-container
@@ -20,13 +24,10 @@ if !post.archived || currentUser && currentUser.admin
       .panel-body.truncate
         if post.body
           .truncated.markdown: != post.$body_preview
+      .panel-actions
+        a.panel-action(href=action + '/' + post.slug data-click="tab" data-target="main") See More
         //- .flex.horz
           if post.User.Images.length
             img.preview-photo(src=post.User.Images[0].path)
           .flex.vert
             
-    form(action='/blog/' + post.slug).panel-actions
-      a.panel-action(href=action + '/' + post.slug data-click="tab" data-target="main") See More
-      if currentUser
-        a.panel-action(data-click="modal" data-target="edit-blog" href='/blog/' + post.slug + '/edit' title="Edit Post") #[i.fa.fa-wrench] Edit
-        button.as-link.panel-action(formmethod="delete" title="Delete Post") #[i.fa.fa-trash] Delete

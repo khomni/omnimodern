@@ -10,10 +10,13 @@ else
   +pagination({baseUrl: '/portfolio', page:page, totalpages:pages})
 
 
+if currentUser.admin
+    .flex.center.pad
+      a.btn(data-click="modal" data-target="new-project" href="/portfolio/new") New Project
+
 .content
   if projects
     each project in projects
       include ./_project
-  if currentUser.admin
-    .flex.center.pad
-      a.btn(data-click="modal" data-target="new-project" href="/portfolio/new") New Project
+    if page < pages
+      a.btn(href="?page=" + (++page) data-click="tab" data-target="main")

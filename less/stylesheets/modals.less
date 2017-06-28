@@ -7,6 +7,14 @@ body.modal-open {
 .draggable {
 	position: absolute;
 	.xs({position: static});
+
+	&.drag-y {
+		.filter(url(#blurY));
+	}
+
+	&.drag-x {
+		.filter(url(#blurX));
+	}
 }
 
 .handle {
@@ -95,7 +103,7 @@ body.modal-open {
 		font-weight: 500;
 		padding: 1rem;
 		padding-right: 2rem;
-		border-bottom: 1px solid #ddd;
+		border-bottom: 1px solid fade(black, 25%);
 		text-align: center;
 	}
 

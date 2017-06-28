@@ -7,29 +7,53 @@ var drag = {
   init: function(){
 
     var dragUpdate = new Ticker()
+
+    let currentX, currentY, lastKnownX, lastKnownY, reset
     // move a dragging element if dragging
     document.addEventListener('mousemove', e => {
       if(!drag.dragging || !drag.dragging.elem) return true; // nothing to drag, do nothing
       e.preventDefault();
 
-      dragUpdate.onTick(function(){
+      let element = drag.dragging.elem
+      dragUpdate.onTick(() => {
         if(!drag.dragging) return false; // mouse has been released before the next frame has been obtained
-
+        clearTimeout(reset)
+        reset = setTimeout(()=>{
+          console.log('debounce')
+          lastKnownX = lastKnownY = null
+          element.classList.remove('drag-x','drag-y')
+        },50)
         // Drag Logic
 
         // get dimensions from the center of the handle
-        var handleRect = drag.dragging.handle.getBoundingClientRect();
+        let handleRect = drag.dragging.handle.getBoundingClientRect();
         handleRect.width = handleRect.right - handleRect.left;
         handleRect.height = handleRect.bottom - handleRect.top;
         handleRect.offsetTop = drag.dragging.handle.offsetTop
         handleRect.offsetLeft = drag.dragging.handle.offsetLeft
 
-        var noHandle = drag.dragging.elem.isSameNode(drag.dragging.handle)
+        let noHandle = drag.dragging.elem.isSameNode(drag.dragging.handle)
+
+        currentX = Math.max(0,(e.clientX - handleRect.width/2 - (noHandle ? 0 : handleRect.offsetLeft)))
+        currentY = Math.max(0,(e.clientY - handleRect.height/2 - (noHandle ? 0 : handleRect.offsetTop)))
+
+        let speedX = Math.abs(currentX - (lastKnownX||currentX))
+        let speedY = Math.abs(currentY - (lastKnownY||lastKnownY))
+
+        console.log(speedX, speedY)
+        
+        if(speedX > speedY && speedX > 10) drag.dragging.elem.classList.add('drag-x');
+        else drag.dragging.elem.classList.remove('drag-x')
+        if(speedY > speedX && speedY > 10) drag.dragging.elem.classList.add('drag-y');
+        else drag.dragging.elem.classList.remove('drag-y')
+
+        lastKnownX = currentX
+        lastKnownY = currentY
 
         // set top-left coordinate of the entire element based on the offset of the center of the handle
         // mouse[x,y] - handle[midY,midY] - hanlde[offsetX,offsetY]
-        drag.dragging.elem.style.left = Math.max(0,(e.clientX - handleRect.width/2 - (noHandle ? 0 : handleRect.offsetLeft)))+"px"
-        drag.dragging.elem.style.top = Math.max(0,(e.clientY - handleRect.height/2 - (noHandle ? 0 : handleRect.offsetTop)))+"px"
+        drag.dragging.elem.style.left = currentX+"px"
+        drag.dragging.elem.style.top = currentY+"px"
       })
       return false;
     },true)

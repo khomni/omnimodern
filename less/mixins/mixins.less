@@ -41,15 +41,18 @@
 .marble-ui() {
   text-decoration: none;
   border: none;
-  background: #ddd;
-  color: @color-dark;
+  color: black;
   box-shadow: 0px 1px 1px fade(black,50%);
-  background: url('/images/textures/marble.jpg'), @spotlight;
-  background-blend-mode: soft-light;
+  background: url('/images/textures/marble.jpg'), #333;
+  background-blend-mode: multiply;
   border-radius: 2px;
-  border: 1px solid fade(black,25%);
   .inset-text();
+  border: 1px solid fade(black,25%);
   transition: 0.25s;
+
+  &:hover {
+    // background: url('/images/textures/marble.jpg'), #444;
+  }
   // &:hover {
   // 	color: @color-primary;
   // }
@@ -84,7 +87,7 @@
 }
 
 .inset-text {
-  text-shadow: 0px 1px 1px fade(white,25%), 0px -1px 1px fade(black,25%);
+  text-shadow: 0px 1px 1px fade(white,12.5%), 0px -1px 1px fade(black,25%);
 }
 
 .placeholder(@rules) {

@@ -75,11 +75,22 @@ body {
     color: white;
   }
 
+  &.scroll-blur {
+    #main {
+      .filter(url(#blurY))
+    }
+  }
+
   &.loading {
     &:after {
       content: "Loading...";
       opacity: 1;
     }
+
+    #content-main {
+      // .filter(brightness(0.5));
+    }
+
   }
 
   &.dropfile {
@@ -287,6 +298,7 @@ header {
   flex: 1;
   z-index: 2;
   overflow-x: hidden;
+  transition: 0.25s;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -325,9 +337,10 @@ section {
   border-radius: 1px;
   position: relative;
   z-index: 2;
+  margin-bottom: 1em;
   
   & + section {
-    margin-top: 2em;
+    margin-top: 1em;
   }
 
   &.raised {
@@ -433,7 +446,7 @@ section {
   max-width: 100%;
   width: 920px;
   margin: auto;
-  padding: 0.5em;
+  // padding: 0.5em;
 }
 
 .error {

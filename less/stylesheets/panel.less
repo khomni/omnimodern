@@ -18,6 +18,7 @@
   // justify-content: flex-start;
   overflow: hidden;
   position: relative;
+  padding: 0.5em;
 
   .truncate {
     max-height: 15em;
@@ -31,35 +32,30 @@
   .panel {
 
   }
-
-  // alternating panels
-  &:nth-child(odd) {
-    .preview-image-container {
-      .sm-plus({
-        float: left;
-        margin-right: 0.5rem;
-        // padding-right: 0.5rem;
-        // border-right: 1px solid fade(black,25%); 
-      })
-    }
+  
+  .preview-image-container {
+    .sm-plus({
+      float: left;
+      margin-right: 0.5rem;
+      // padding-right: 0.5rem;
+      // border-right: 1px solid fade(black,25%); 
+    })
   }
 
+  // alternating panels
+  // &:nth-child(odd) {
+
+  // }
+
   &:nth-child(even) {
-    .preview-image-container {
-      .sm-plus({
-        float: right;
-        margin-left: 0.5rem;
-        // padding-left: 0.5rem;
-        // border-left: 1px solid fade(black,25%); 
-      })
-    }
+
   }
 
   &::after {
     content:"";
     display: block;
     width: 100%;
-    height: 1px;
+    height: 2px;
     background: fade(black,25%);
     margin-top: 2em;
   }
@@ -83,6 +79,12 @@
   justify-content: space-between;
   align-items: baseline;
 
+  .xs({
+    flex-flow: column;
+    align-items: flex-start;
+  });
+
+
   color: inherit;
   h1,h2,h3,h4,h5 {
     margin: 0;
@@ -99,9 +101,8 @@
 }
 
 .panel-actions {
+  margin: 0.5em auto;
   display: flex;
-  padding: 0.5em;
-  justify-content: space-around;
 }
 
 .panel-action {
@@ -117,7 +118,7 @@
 
 .truncate {
   background: -webkit-linear-gradient(@color-ui 50%, fade(@color-ui, 0%) 100%);
-  background-size: 100%;
+  background-size: 100% 15em;
   background-attachment: local;
   max-height: 100%;
   background-repeat: no-repeat;
