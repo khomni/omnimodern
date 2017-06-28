@@ -82,4 +82,11 @@ header {
   object-fit: cover;
   border-radius: 2px;
   box-shadow: 0px 1px 2px fade(black,50%);
+  opacity: 1;
+  transition: 0.25s;
+
+  &.loading {
+    opacity: 0;
+  }
+
 }

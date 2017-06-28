@@ -2,7 +2,7 @@ if image
   - let path = (imageable && imageable.path || '')
   .preview-image-container(data-kind="Image" data-ref=image.id)
     a(href= path + '/images/' + image.id data-click="modal" data-target="image-"+image.id)
-      img.preview-image(src=image.path)
+      img.preview-image(src=image.path onload="this.classList.remove('loading')").loading
     if currentUser
       form(action=path +  '/images/' + image.id data-response="json" ).preview-image-overlay.flex.fill
         a.btn(href=path + '/images/' + image.id + '/edit' data-click="modal"): i.fa.fa-wrench

@@ -2,4 +2,4 @@
   each image in images
     .preview-image-container
       a(href= '/images/' + image.id data-click="tab" data-target="main")
-        img.preview-image(src=image.path)
+        img.preview-image(src=image.path onload="this.classList.remove('loading')").loading

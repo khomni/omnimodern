@@ -24,8 +24,8 @@ if !post.archived || currentUser && currentUser.admin
       .panel-body.truncate
         if post.body
           .truncated.markdown: != post.$body_preview
-      .panel-actions
-        a.panel-action(href=action + '/' + post.slug data-click="tab" data-target="main") See More
+    .panel-actions
+      a.panel-action(href=action + '/' + post.slug data-click="tab" data-target="main") See More
         //- .flex.horz
           if post.User.Images.length
             img.preview-photo(src=post.User.Images[0].path)
