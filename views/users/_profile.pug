@@ -1,0 +1,30 @@
+if currentUser
+  form.flex.center.pad
+    a.btn(href=user.url + "/edit" data-click="modal") Update Profile
+
+.content
+  section.panel
+    .panel-content
+      if user.Images && user.Images.length > 0
+        .preview-image-container
+          img.preview-image(src=user.Images[0].path)
+      .panel-header
+        a.panel-title(href=`/u/${user.username}` data-click="tab" data-target="main")
+          h1= user.name
+
+      .panel-body
+        .markdown
+          if user.bio
+              != user.$bio
+  section.panel
+    .panel-header
+      h2 Skills
+  section.panel
+    .panel-header
+      h2 Recent Blog Posts
+      if user.BlogPosts
+      ul
+        each post in user.BlogPosts
+          li #[a(href="/portfolio/" + user.url + "/blog/" + post.slug data-click="tab" data-target="main")= post.title] #[label.timestamp(data-time=post.updatedAt.getTime())]
+      .panel-detail: a(href="/portfolio/" + user.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
+          

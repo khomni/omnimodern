@@ -1,5 +1,11 @@
 .markdown {
 
+  p {
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
   code {
     color: @color-primary;
     background: fade(@color-primary, 25%);

@@ -58,7 +58,7 @@ router.route('/admin')
 
     req.logIn(user, err => {
       if (err) return next(err);
-      return res.set('X-Redirect', origin).sendStatus(200);
+      return res.set('X-Redirect', req.headers.referer).sendStatus(200);
     })
   })(req, res, next)
 
@@ -94,6 +94,7 @@ router.get('/about', (req, res, next) => {
   return res.render('about');
 });
 
+router.use('/u', require('./user'));
 router.use('/portfolio', require('./portfolio'));
 router.use('/blog', require('./blog'));
 

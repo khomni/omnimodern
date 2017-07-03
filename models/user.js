@@ -1,7 +1,8 @@
 "use strict";
 
 const bcrypt = require('bcrypt-nodejs');
-Promise.promisifyAll(bcrypt)
+const marked = require('marked');
+Promise.promisifyAll(bcrypt);
 
 module.exports = function(sequelize, DataTypes) {
   var User = sequelize.define("User", {
@@ -17,6 +18,16 @@ module.exports = function(sequelize, DataTypes) {
     name: { // will display on blog posts, etc
       type: DataTypes.STRING,
     },
+    bio: {
+      type: DataTypes.TEXT
+    },
+    $bio: {
+      type: DataTypes.VIRTUAL,
+      get: function(){
+        if(!this.bio) return null;
+        return marked(this.bio);
+      }
+    },
     password: {
       type: DataTypes.STRING,
       validate: {
@@ -29,7 +40,7 @@ module.exports = function(sequelize, DataTypes) {
     url: {
       type: DataTypes.VIRTUAL,
       get: function(){
-        return '/users/' + this.getDataValue('username')
+        return '/u/' + this.getDataValue('username')
       }
     }
   }, {
@@ -44,6 +55,12 @@ module.exports = function(sequelize, DataTypes) {
           },
           onDelete: 'cascade',
         });
+        
+        User.hasMany(models.BlogPost, {
+          constraints:false
+        });
+
+        User.hasMany(models.Skill)
 
         User.addScope('defaultScope', {
           order: [['createdAt','ASC']],
@@ -53,7 +70,12 @@ module.exports = function(sequelize, DataTypes) {
         User.addScope('images', {
           order: [['createdAt','ASC']],
           include: [{model:models.Image}]
-        }, {override: true})
+        })
+
+        User.addScope('skills', {
+          order: [['proficiency','DESC'],['start_date','ASC']],
+          include: [{model:models.Skill}]
+        })
         
       },
     }

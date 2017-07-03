@@ -13,7 +13,7 @@ if(cluster.isMaster) {
   // make sure the database is working before spawning children
   return database.authenticate()
   .then(() => {
-    console.log(colors.gray(`${database.config.database} connected`))
+    console.log(colors.gray(`${database.config.database} authenticated`))
 
     for(let i = 0; i < CONFIG.process.threads; i++) {
       let thisChild = cluster.fork();
@@ -23,7 +23,7 @@ if(cluster.isMaster) {
 
     cluster.on('listening', (worker, code, signal) => { 
       connectedWorkers++;
-      if(process.stdout.isTTY) process.stdout.write(colors[COLORS[worker.id % 8]]('■'))
+      if(process.stdout.isTTY) process.stdout.write(colors[COLORS[worker.id % 7]]('■'))
       if(connectedWorkers >= CONFIG.process.threads) {
         if(process.stdout.isTTY) process.stdout.cursorTo(0)
         console.log(colors.gray(`${connectedWorkers} workers listening`))
@@ -31,7 +31,7 @@ if(cluster.isMaster) {
     });
 
     cluster.on('message', (worker, message, handle) => {
-      console.log(colors[COLORS[worker.id % 8]](`${worker.process.pid}: ${message}`))
+      console.log(colors[COLORS[worker.id % 7]](`${worker.process.pid}: ${message}`))
       if(message == 'shutdown') worker.kill();
 
     })
@@ -40,12 +40,12 @@ if(cluster.isMaster) {
       connectedWorkers--;
       if(worker.exitedAfterDisconnect || code == 0) return console.log(`${connectedWorkers} workers listening`);
 
-      console.log(colors[COLORS[worker.id % 8]](`worker ${worker.process.pid} died; reconnecting...`))
+      console.log(colors[COLORS[worker.id % 7]](`worker ${worker.process.pid} died; reconnecting...`))
       cluster.fork();
     })
 
     cluster.on('disconnect', (worker, code, signal) => {
-      console.log(colors[COLORS[worker.id % 8]](`worker ${worker.process.pid} disconnected`))
+      console.log(colors[COLORS[worker.id % 7]](`worker ${worker.process.pid} disconnected`))
     })
 
   })
@@ -70,7 +70,7 @@ if(cluster.isMaster) {
   var server = http.createServer(app);
 
   db._connection.on('error', err => {
-    console.error(colors.process(`Worker ${process.pid} could not connect to the database:`, err.message))
+    console.error(colors.process(`Worker ${process.pid} could not connect to the database:`, err.stack))
     process.exit(1);
   })
 

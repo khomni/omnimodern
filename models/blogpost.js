@@ -69,6 +69,11 @@ module.exports = function(sequelize, DataTypes) {
           include: [{model:models.User, required:false}, {model:models.Image, limit:1, required:false}]
         }, {override: true})
 
+        BlogPost.addScope('preview', {
+          attributes: ['id','body','title','updatedAt','createdAt','slug','path'],
+          order: [['createdAt','DESC']]
+        })
+
         BlogPost.addScope('images', {
           order: [['createdAt','DESC']],
           include: [{model:models.Image, required:false}]

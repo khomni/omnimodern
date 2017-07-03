@@ -1,6 +1,13 @@
 extends /index
 
 block meta
+  meta(property="og:title"  content=project.title)
+  meta(property="og:site_name"  content="Omnigoat Design")
+  if project.Images.length >0 
+    meta(property="og:image"  content=project.Images[0].path)
+  else
+    meta(property="og:image" content="/images/header.png")
+  meta(property="og:type" content="article")
 
 block content
   include ./_detail

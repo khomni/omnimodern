@@ -6,39 +6,41 @@ if currentUser
       button.btn(formaction="/portfolio/" + project.url formmethod="delete") Delete Project
 
 .content
-  .project.flex.vert.fill
-    .project-subsection
-      .flex.grow.vert
-        .flex.horz
-          a.project-title(href="/portfolio/" + project.url data-click="tab" data-target="main")
-            h1= project.title
-          .flex.grow.je.center
-            label.timestamp(data-time=project.updatedAt.getTime())
-        .flex.horz
-          .project-subsection.flex.vert.grow
-            .project-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
-            .project-detail= project.status
-    .project-subsection.markdown
-      if project.description
-        != markdown(project.description)
+  section.panel
+    .panel-header
+        a.panel-title(href="/portfolio/" + project.url data-click="tab" data-target="main")
+          h1= project.title
+        label.timestamp(data-time=project.updatedAt.getTime())
+    .panel-details
+      .panel-detail in #[a(href="/portfolio?category=" + project.category data-click="tab" data-target="main")= project.category]
+      .panel-detail= project.status
+    .panel-body
+      .markdown
+        if project.description
+          != markdown(project.description)
 
-    if project.BlogPosts.length > 0
-      .project-subsection
+    
+  if project.BlogPosts.length > 0
+    section.panel
+      .panel-header
         h3 Recent Blog Posts
+      .panel-body
         each post in project.BlogPosts
           .project-subsection
             -action = "/portfolio/" + project.url + "/blog"
             include ../blog/_post
+      .panel-actions
         a(href="/portfolio/" + project.url + "/blog" data-click="tab" data-target="main") See All Blog Posts
 
-  .flex.vert(class=currentUser&&'drop-area')
-    if project.Images
-      .flex.center.pad
-        each image in project.Images
-          include ../images/preview-image
-    if currentUser
-      form(action="/portfolio/" + project.url + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
-        label.btn
-          span Select Files
-          input(type="file" name="files" accept="image/*" multiple)
-        button.btn Upload
+  section.panel
+    .flex.vert(class=currentUser&&'drop-area')
+      if project.Images
+        .flex.center.pad
+          each image in project.Images
+            include ../images/preview-image
+      if currentUser
+        form(action="/portfolio/" + project.url + '/images' method="POST" enctype="multipart/form-data" data-response="json").flex.center.pad.grow.drop-target
+          label.btn
+            span Select Files
+            input(type="file" name="files" accept="image/*" multiple)
+          button.btn Upload

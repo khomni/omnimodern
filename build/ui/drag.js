@@ -39,9 +39,9 @@ var drag = {
         let speedX = Math.abs(currentX - (lastKnownX||currentX))
         let speedY = Math.abs(currentY - (lastKnownY||currentY))
 
-        if(speedX > speedY && speedX > 10) drag.dragging.elem.classList.add('drag-x');
+        if(speedX > (speedY * 2) && speedX > 10) drag.dragging.elem.classList.add('drag-x');
         else drag.dragging.elem.classList.remove('drag-x')
-        if(speedY > speedX && speedY > 10) drag.dragging.elem.classList.add('drag-y');
+        if(speedY > (speedX * 2) && speedY > 10) drag.dragging.elem.classList.add('drag-y');
         else drag.dragging.elem.classList.remove('drag-y')
 
         lastKnownX = currentX
