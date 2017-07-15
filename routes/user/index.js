@@ -32,7 +32,6 @@ userRouter.get('/', (req,res,next) => {
   if(req.json) return res.json(res.locals.user)
   return res.locals.user.getBlogPosts({scope:'preview'}).then(posts => {
     res.locals.user.BlogPosts = posts
-    console.log(res.locals.user);
     if(req.isTab) return res.render('users/_profile')
     return res.render('users/profile')
   })

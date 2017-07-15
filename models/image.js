@@ -42,7 +42,7 @@ module.exports = function(sequelize, DataTypes) {
     s3: { // amazon s3 components
       type: DataTypes.JSONB,
       validate: function(object){
-        if(!('region' in object)) throw new Error('Missing s3 region');
+        if(!('region' in object)) throw newrror('Missing s3 region');
         if(!('bucket' in object)) throw new Error('Missing s3 bucket');
         if(!('key' in object)) throw new Error('Missing s3 key');
       }
@@ -89,11 +89,11 @@ module.exports = function(sequelize, DataTypes) {
     let filename = crypto.pseudoRandomBytes(16).toString('hex') + Date.now() + path.extname(image._file.originalname);
 
     let key = [];
-    key.push(CONFIG.aws.directory);
+    if(CONFIG.aws.directory) key.push(CONFIG.aws.directory);
     key.push(image._directory);
     key.push(filename);
 
-    image.key = key.join('/');
+    image.key = '/' + key.join('/');
 
     return image
   })

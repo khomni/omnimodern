@@ -10,7 +10,8 @@
           .flex.center.pad
             if project.Images
               each image in project.Images
-                .flex.vert.border(data-kind="Image" data-ref=image.id)
+                include ../images/preview-image
+                //- .flex.vert.border(data-kind="Image" data-ref=image.id)
                   a(href=action + '/images/' + image.id data-click="modal" data-target="image-"+image.id draggable="false")
                     img(src=image.path draggable="false").photo-upload
                   .flex.pad.distribute
