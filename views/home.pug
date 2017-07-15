@@ -1,5 +1,8 @@
 .flex.horz.pad.center
-  each image in images
-    .preview-image-container
-      a(href= '/images/' + image.id data-click="tab" data-target="main")
-        img.preview-image(src=image.path onload="this.classList.remove('loading')").loading
+  if images && images.length
+    each image in images
+      .preview-image-container
+        a(href= '/images/' + image.id data-click="tab" data-target="main")
+          img.preview-image(src=image.path onload=`this.classList.remove('loading')`).loading
+  else
+    p Hey, thanks for visiting my web zone. There's nothing here right now, but once I start uploading images, they'll show up here.
