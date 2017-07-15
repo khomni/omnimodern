@@ -33,6 +33,8 @@ var marked = require('marked');
 
 app.locals.basedir = APPROOT+'/views'
 app.locals.markdown = marked
+app.locals.SITE_NAME = global.SITE_NAME = "OmniGoat Design"
+app.use(Common.middleware.title());
 
 // stylesheets
 var lessMiddleware = require('less-middleware');

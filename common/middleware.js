@@ -76,20 +76,6 @@ module.exports = {
       return next();
     }
   },
-
-  //
-  requirePermission: (pathToInstance,query) => (req,res,next) => {
-    if(!req.user) return next(Common.error.authorization('You must be logged in to access this resource'));
-    let instance = Common.utilities.get(res.locals,pathToInstance)
-    if(!instance) return next() // no instance by that name mounted
-
-    return req.user.checkPermission(instance, query)
-    .then(permission => {
-      if(!permission) throw Common.error.authorization('You do not have permission to modify this resource');
-      return next();
-    })
-    .catch(next)
-  },
 }
 
 // given a req.body with a number of dot-delimited field names, converts the req.body into the corresponding object
@@ -155,4 +141,10 @@ module.exports.statictab = (req,res,next) => {
   if(req.isTab || req.json || req.modal) return next();
   console.log(req.originalUrl)
   return res.render('index', {href: req.originalUrl})
+}
+
+module.exports.title = title => (req,res,next) => {
+  res.locals.title = title ? `${title} – ${SITE_NAME}` : SITE_NAME;
+  res.set('X-Page-Title', encodeURIComponent(res.locals.title));
+  return next();
 }

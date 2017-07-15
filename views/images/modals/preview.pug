@@ -1,4 +1,6 @@
 .modal-content
+  if currentUser
+    a.close.lg.float.left(href='/images/' + image.id + '/edit' data-click="modal" data-target=`image-${image.id}-edit`): i.fa.fa-wrench
   button.as-link.close.lg.float(data-click="remove" data-target=".modal")
   img(src=image.path style="max-height:100vh;object-fit:cover;max-width:100vw;")
       

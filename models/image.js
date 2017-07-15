@@ -84,10 +84,8 @@ module.exports = function(sequelize, DataTypes) {
     }
   });
 
-
-
   Image.beforeValidate((image, options) => {
-    if(!image._file) throw new Error('No file provided')
+    if(!image._file) return image; // updating after the fact 
     let filename = crypto.pseudoRandomBytes(16).toString('hex') + Date.now() + path.extname(image._file.originalname);
 
     let key = [];

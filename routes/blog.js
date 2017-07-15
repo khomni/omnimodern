@@ -55,6 +55,8 @@ router.use('/:slug', (req,res,next) => {
     if(!blogpost) throw Common.error.notfound('Blog Post')
     res.locals.post = blogpost
     res.locals.action = req.baseUrl
+    res.locals.title = `${blogpost.title} – ${SITE_NAME}`
+    res.set('X-Page-Title', encodeURIComponent(res.locals.title))
 
     if(blogpost.Images && blogpost.Images.length > 0) {
       let randomImage = blogpost.Images[Math.floor(Math.random()*blogpost.Images.length)].path

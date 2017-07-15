@@ -82,6 +82,9 @@ router.use('/:url', (req,res,next) => {
   .then(project => {
     if(!project) throw Common.error.notfound('Project');
     res.locals.project = res.locals.imageable = project
+    res.locals.title = `${project.title} – ${SITE_NAME}`
+    res.set('X-Page-Title', encodeURIComponent(res.locals.title))
+    
 
     if(project.Images && project.Images.length > 0) {
       let randomImage = project.Images[Math.floor(Math.random()*project.Images.length)].path

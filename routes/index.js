@@ -15,7 +15,7 @@ router.use('/', (req,res,next) => {
 /* GET home page. */
 router.get('/', (req, res, next) => {
 
-  return db.Image.findAll({order:[['createdAt','DESC']]})
+  return db.Image.findAll({where:{public:true}, order:[['createdAt','DESC']]})
   .then(images => {
     if(images.length) {
       let randomImage = images[Math.floor(Math.random()*images.length)].path
@@ -89,14 +89,14 @@ router.post('/signup', (req,res,next) => {
 });
 
 
-router.get('/about', (req, res, next) => {
+router.get('/about', Common.middleware.title('About'), (req, res, next) => {
   if(req.isTab) return res.render('_about');
   return res.render('about');
 });
 
 router.use('/u', require('./user'));
-router.use('/portfolio', require('./portfolio'));
-router.use('/blog', require('./blog'));
+router.use('/portfolio', Common.middleware.title('Portfolio'), require('./portfolio'));
+router.use('/blog', Common.middleware.title('Blog'), require('./blog'));
 
 router.use('/images', require('./images'))
 

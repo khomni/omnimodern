@@ -1,6 +1,7 @@
 'use strict';
 
 const Anim = require('../extensions/anim');
+const Effects = require('../effects');
 
 window.addEventListener('popstate', e => {
   if(!e.state.href) return true;
@@ -87,6 +88,8 @@ document.addEventListener('load.pane', function(e){
     }
     // send the xhr resonse to the tab
     let html = xhr.responseText
+    let title = xhr.getResponseHeader('X-Page-Title');
+    if(title) document.getElementById('pageTitle').innerHTML = decodeURIComponent(title);
 
     if(xhr.getResponseHeader('X-Modal')) return Modal.methods.createModal(html);
 
@@ -95,7 +98,10 @@ document.addEventListener('load.pane', function(e){
     if(!xhr.responseURL) xhr.responseURL = href
     thisPane.dispatchEvent(new CustomEvent('loaded', {detail: xhr, bubbles:true, cancelable:true}));
   })
-  .catch(err => thisPane.classList.add('error'))
+  .catch(err => {
+    console.error(err);
+    thisPane.classList.add('error')
+  })
 
 })
 

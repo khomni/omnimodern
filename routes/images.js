@@ -70,6 +70,7 @@ router.use('/:id', (req,res,next) => {
     res.locals.image = image
     res.locals.headerImage = image.path
     res.set('X-Header-Image', image.path)
+    res.locals.action = '/images/' + image.id
     return next();
   })
   .catch(next)
@@ -87,6 +88,21 @@ imageRouter.get('/', (req,res,next) => {
   return res.redirect(res.locals.image.path)
 });
 
+// edit image meta-data, visibility, etc
+imageRouter.get('/edit', (req,res,next) => {
+  if(!res.locals.image) return next();
+  if(req.modal) return res.render('images/modals/edit')
+  return res.redirect(res.locals.image.path)
+});
+
+imageRouter.patch('/', Common.middleware.objectify, (req,res,next) => {
+  res.locals.image.update(req.body)
+  .then(image => {
+    return res.set('X-Redirect', req.headers.referer).sendStatus(302)
+    return next();
+  })
+  .catch(next)
+})
 
 imageRouter.delete('/', Common.middleware.requireUser, Common.middleware.confirm({route:'images'}), (req,res,next) => {
   if(!res.locals.image) return next();

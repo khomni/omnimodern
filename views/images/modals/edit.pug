@@ -1,0 +1,25 @@
+.modal-dialog
+  .modal-content
+    .modal-title Edit Image
+    .modal-body 
+      form(name='image' action=action method='patch')
+        .flex.vert.pad
+          .flex.vert
+            label Owning Post
+            input.form-input(name='imageable_id' placeholder="Owning Post" value=image.imageable_id required)
+          .flex.vert
+            label Owning Post Type
+            select.form-input(name='imageable' value=image.imageable required)
+              each modelName in Object.keys(db).filter(key => db[key].constructor.name == 'Model')
+                option(value=modelName selected=image.imageable==modelName)= modelName
+          .flex.vert.center
+            label
+            input.form-input(type="number" placeholder="Order" name="order" value=image.order min="0")
+          .flex.vert.center
+            label.checkbox
+              input(type="checkbox" name="public" checked=image.public value="true" default="false")
+              span Public
+
+        button.btn.block(type='submit') Update Image
+
+
